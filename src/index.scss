@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+body {
+  padding-top: 0.1rem;
+  a {
+    color: #191C1F;
+  }
+  background: linear-gradient(4deg, mix(white, #282c34, 3), mix(white, #282c34, 7));
+  width: 100%
+}
+
+.chart {
+  width: 90vw;
+  height: 50vh;
+  margin: auto;
+}
+
+.config-container {
+  width: 90vw;
+  height: 50vh;
+  margin: auto;
+}
