@@ -1,11 +1,28 @@
 {
   "name": "data-visualisation",
+  "description": "An app that allows easy display of statistical data.",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "prettier": "^1.18.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1"
+    "react-scripts": "3.1.1",
+    "sass": "^1.22.12"
+  },
+  "keywords": [
+    "Data",
+    "Visualisation",
+    "Data",
+    "Visualisation",
+    "Statistics",
+    "Data"
+  ],
+  "author": "Jeroen Olieslagers",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JeroenOlieslagers/data-visualisation.git"
   },
   "scripts": {
     "start": "react-scripts start",
