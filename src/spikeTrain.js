@@ -1,6 +1,6 @@
 import React from 'react';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
 import dark from '@amcharts/amcharts4/themes/dark';
 import animated from '@amcharts/amcharts4/themes/animated';
 import randomDataGenerator from './randomDataGenerator';
@@ -27,11 +27,9 @@ export default class SpikeTrain extends React.Component {
       isStatic: true,
       independent: 'ID',
       rules: ['positive'],
-      dependent: [
-        {name: 'column-1', typical: mean, rules: []},
-      ]
+      dependent: [{name: 'column-1', typical: mean, rules: []}]
     });
-    return chart_data
+    return chart_data;
   }
 
   createChart() {
@@ -66,7 +64,7 @@ export default class SpikeTrain extends React.Component {
     spikes.strokeWidth = 1;
     spikes.tensionX = 1;
     spikes.fillOpacity = 0;
-    spikes.stroke =  am4core.color("#FF8000");
+    spikes.stroke = am4core.color('#FF8000');
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -89,8 +87,8 @@ export default class SpikeTrain extends React.Component {
   render() {
     return (
       <div>
-        <div className='chart' ref={'chart'} />
+        <div className="chart" ref={'chart'} />
       </div>
-    )
+    );
   }
 }

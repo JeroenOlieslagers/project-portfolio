@@ -2,31 +2,48 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
-import Counter from './Counter';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import produce from 'immer';
 import {BrowserRouter} from 'react-router-dom';
+import {linToLog} from './utils';
 
 const initialState = {
-  count: 0
+  mean: 100,
+  updateData: false
 };
 
 function reducer(state = initialState, action) {
-  console.log('reducer', state, action);
-  switch(action.type) {
-    case 'INCREMENT':
+  switch (action.type) {
+    case 'SLIDER_CHANGE':
       return {
-        count: state.count + 1
+        ...state,
+        mean: linToLog(action.newValue)
       };
-    case 'DECREMENT':
+    case 'INPUT_CHANGE':
       return {
-        count: state.count - 1
+        ...state,
+        mean: action.event.target.value === '' ? '' : Number(action.event.target.value)
       };
-    case 'RESET':
+    case 'CLIP_MEAN':
+      if (state.mean > action.max) {
+        return {
+          ...state,
+          mean: action.max
+        };
+      } else if (state.mean < 0) {
+        return {
+          ...state,
+          mean: 0
+        };
+      } else {
+        return state;
+      }
+    case 'TOGGLE_UPDATE_DATA':
       return {
-        count: 0
+        ...state,
+        updateData: !state.updateData
       };
     default:
       return state;
@@ -34,13 +51,14 @@ function reducer(state = initialState, action) {
 }
 const store = createStore(reducer);
 
-const Bapp = () => (
+ReactDOM.render(
   <Provider store={store}>
-    <Counter />
-  </Provider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById('root')
 );
-
-ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
