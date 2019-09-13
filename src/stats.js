@@ -5,6 +5,7 @@ import dark from '@amcharts/amcharts4/themes/dark';
 import animated from '@amcharts/amcharts4/themes/animated';
 import randomDataGenerator from './randomDataGenerator';
 import * as utils from './utils';
+import StatsConfig from './configDashboards/StatsConfig'
 
 export default class Stats extends React.Component {
   constructor() {
@@ -18,7 +19,7 @@ export default class Stats extends React.Component {
   }
 
   createData () {
-    const samples = 1000000;
+    const samples = 1000;
     const mean = 1000;
     const st_div = 20;
     let chart_data = randomDataGenerator({
@@ -141,10 +142,10 @@ export default class Stats extends React.Component {
   render() {
     return (
       <div>
-        <div className={'config-container'}>
-          <button>Hello</button>
+        <div className='chart__container'>
+          <StatsConfig />
         </div>
-        <div className='chart' ref={'chart'} />
+        <div className='chart__container' ref={'chart'} />
       </div>
     )
   }

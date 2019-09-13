@@ -21,14 +21,15 @@ body {
   width: 100%
 }
 
-.chart {
+.chart__container {
   width: 90vw;
   height: 50vh;
   margin: auto;
 }
 
-.config-container {
-  width: 90vw;
-  height: 50vh;
-  margin: auto;
+.slider {
+  &__container {
+    width: 30rem;
+    padding: 3rem;
+  }
 }
