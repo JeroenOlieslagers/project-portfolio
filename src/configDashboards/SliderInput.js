@@ -2,20 +2,13 @@ import React from 'react';
 import {Slider, Input, Grid, Typography} from '@material-ui/core';
 import {BarChart} from '@material-ui/icons';
 import {logToLin} from '../utils';
-import {sliderChange, inputChange, clipMean, toggleUpdateData} from '../actions';
-import {connect} from 'react-redux';
 
-class SliderInput extends React.Component {
-  handleBlur = () => {
-    this.props.clipMean(100000);
-    this.props.toggleUpdateData();
-  };
-
+export default class SliderInput extends React.Component {
   render() {
     return (
       <div className="slider__container">
         <Typography id="input-slider" gutterBottom>
-          Mean
+          {this.props.label}
         </Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
@@ -23,8 +16,8 @@ class SliderInput extends React.Component {
           </Grid>
           <Grid item xs>
             <Slider
-              value={logToLin(this.props.mean)}
-              onChange={this.props.sliderChange}
+              value={logToLin(this.props.value)}
+              onChange={(event, newValue) => this.props.sliderChange(event, newValue, this.props.valueName)}
               onChangeCommitted={this.props.toggleUpdateData}
               aria-labelledby="input-slider"
               max={46}
@@ -33,10 +26,10 @@ class SliderInput extends React.Component {
           <Grid item>
             <Input
               className="slider__input"
-              value={this.props.mean}
+              value={this.props.value}
               margin="dense"
-              onChange={this.props.inputChange}
-              onBlur={this.handleBlur}
+              onChange={(event) => this.props.inputChange(event, this.props.valueName)}
+              onBlur={() => this.props.handleBlur(this.props.valueName)}
               inputProps={{
                 'aria-labelledby': 'input-slider'
               }}
@@ -47,21 +40,3 @@ class SliderInput extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    mean: state.mean
-  };
-}
-
-const mapDispatchToProps = {
-  sliderChange,
-  inputChange,
-  clipMean,
-  toggleUpdateData
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SliderInput);

@@ -21,13 +21,16 @@ body {
 
 .chart__container {
   width: 90vw;
-  height: 50vh;
+  height: 29rem;
   margin: auto;
 }
 
 .stats {
   &__nav {
     padding: 2rem;
+  }
+  &__config {
+    height: 20rem;
   }
 }
 

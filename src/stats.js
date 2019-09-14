@@ -25,8 +25,8 @@ class Stats extends React.Component {
 
   createData() {
     const samples = 1000;
-    let mean = this.props.mean;
-    const st_div = 20;
+    const mean = this.props.mean;
+    const st_div = this.props.stDev;
     let chart_data = randomDataGenerator({
       timeRange: samples,
       variance_divisor: mean / st_div,
@@ -167,6 +167,7 @@ class Stats extends React.Component {
 function mapStateToProps(state) {
   return {
     mean: state.mean,
+    stDev: state.stDev,
     updateData: state.updateData
   };
 }

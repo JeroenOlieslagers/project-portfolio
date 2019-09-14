@@ -11,32 +11,29 @@ import {linToLog} from './utils';
 
 const initialState = {
   mean: 100,
+  stDev: 10,
   updateData: false
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
     case 'SLIDER_CHANGE':
-      return {
-        ...state,
-        mean: linToLog(action.newValue)
-      };
+      return produce(state, draft => {
+        draft[action.value] = linToLog(action.newValue)
+      });
     case 'INPUT_CHANGE':
-      return {
-        ...state,
-        mean: action.event.target.value === '' ? '' : Number(action.event.target.value)
-      };
+      return produce(state, draft => {
+        draft[action.value] = action.event.target.value === '' ? '' : Number(action.event.target.value)
+      });
     case 'CLIP_MEAN':
-      if (state.mean > action.max) {
-        return {
-          ...state,
-          mean: action.max
-        };
-      } else if (state.mean < 0) {
-        return {
-          ...state,
-          mean: 0
-        };
+      if (state[action.value] > action.max) {
+        return produce(state, draft => {
+          draft[action.value] = action.max
+        })
+      } else if (state[action.value] < 0) {
+        return produce(state, draft => {
+          draft[action.value] = 0
+        })
       } else {
         return state;
       }
