@@ -1,63 +1,58 @@
 import React from 'react';
-import {Paper, Slider, Input, Grid, Typography} from '@material-ui/core';
-import {BarChart} from '@material-ui/icons';
+import {Paper} from '@material-ui/core';
+import SliderInput from './SliderInput';
+import {clipMean, inputChange, sliderChange, toggleUpdateData} from '../actions';
+import {connect} from 'react-redux';
 
 
-export default function StatsConfig() {
-  const [value, setValue] = React.useState(3);
-
-  const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
+class StatsConfig extends React.Component {
+  handleBlur = (valueName) => {
+    this.props.clipMean(100000, valueName);
+    this.props.toggleUpdateData();
   };
 
-  const handleInputChange = event => {
-    setValue(event.target.value === '' ? '' : Number(event.target.value));
-  };
-
-  const handleBlur = () => {
-    if (value < 0) {
-      setValue(0);
-    } else if (value > 100) {
-      setValue(100);
-    }
-  };
-
-  return (
-    <Paper className='chart__container'>
-      <div className='slider__container'>
-        <Typography id="input-slider" gutterBottom>
-          Mean
-        </Typography>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <BarChart />
-          </Grid>
-          <Grid item xs>
-            <Slider
-              value={typeof value === 'number' ? value : 0}
-              onChange={handleSliderChange}
-              aria-labelledby="input-slider"
-              max={20}
-            />
-          </Grid>
-          <Grid item>
-            <Input
-              className='slider__input'
-              value={(value + 1 % 10) * Math.pow(10, Math.floor(value / 10))}
-              margin="dense"
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              inputProps={{
-                step: 10,
-                min: 0,
-                max: 1e6,
-                type: 'number',
-                'aria-labelledby': 'input-slider',
-              }}
-            />
-          </Grid>
-        </Grid>
-      </div>
-    </Paper>
-  )
+  render() {
+    return (
+      <Paper className='stats__config'>
+        <SliderInput
+          label={'Mean'}
+          valueName={'mean'}
+          value={this.props.mean}
+          inputChange={this.props.inputChange}
+          sliderChange={this.props.sliderChange}
+          toggleUpdateData={this.props.toggleUpdateData}
+          handleBlur={this.handleBlur}
+        />
+        <SliderInput
+          label={'Standard Deviation'}
+          valueName={'stDev'}
+          value={this.props.stDev}
+          inputChange={this.props.inputChange}
+          sliderChange={this.props.sliderChange}
+          toggleUpdateData={this.props.toggleUpdateData}
+          handleBlur={this.handleBlur}
+        />
+      </Paper>
+    );
+  }
 }
+
+function mapStateToProps(state) {
+  return {
+    mean: state.mean,
+    stDev: state.stDev
+  };
+}
+
+const mapDispatchToProps = {
+  sliderChange,
+  inputChange,
+  clipMean,
+  toggleUpdateData
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StatsConfig);
+

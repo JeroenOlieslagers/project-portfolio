@@ -1,37 +1,39 @@
 import React from 'react';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
 import dark from '@amcharts/amcharts4/themes/dark';
 import animated from '@amcharts/amcharts4/themes/animated';
 import randomDataGenerator from './randomDataGenerator';
 import * as utils from './utils';
-import StatsConfig from './configDashboards/StatsConfig'
+import StatsConfig from './configDashboards/StatsConfig';
+import {connect} from 'react-redux';
+import {toggleUpdateData} from './actions';
+import {BottomNavigation, BottomNavigationAction} from '@material-ui/core';
+import {Favorite, LocationOn, Restore} from '@material-ui/icons';
 
-export default class Stats extends React.Component {
+class Stats extends React.Component {
   constructor() {
     super();
     this.chart = null;
     am4core.options.commercialLicense = true;
+    this.mean = 0;
   }
 
   componentDidMount() {
     this.createChart();
   }
 
-  createData () {
-    const samples = 1000000;
-    const mean = 1000;
-    const st_div = 20;
+  createData() {
+    const samples = 1000;
+    const mean = this.props.mean;
+    const st_div = this.props.stDev;
     let chart_data = randomDataGenerator({
       timeRange: samples,
       variance_divisor: mean / st_div,
       isStatic: true,
       independent: 'ID',
       rules: ['positive'],
-      dependent: [
-        {name: 'column-1', typical: mean, rules: []},
-        {name: 'column-3', typical: mean, rules: ['uniform']}
-      ]
+      dependent: [{name: 'column-1', typical: mean, rules: []}, {name: 'column-3', typical: mean, rules: ['uniform']}]
     });
     let dummy = utils.createHistogram(chart_data);
     let data = [];
@@ -62,7 +64,8 @@ export default class Stats extends React.Component {
     // Themes end
 
     // Create chart instance
-    let chart = am4core.create(this.refs.chart, am4charts.XYChart);
+    this.chart = am4core.create(this.refs.chart, am4charts.XYChart);
+    let chart = this.chart;
     chart.categoryField = 'category';
 
     // Add data
@@ -81,7 +84,7 @@ export default class Stats extends React.Component {
     yAxis2.renderer.grid.template.disabled = true;
     yAxis2.renderer.line.strokeOpacity = 1;
     yAxis2.renderer.line.strokeWidth = 2;
-    yAxis2.renderer.line.stroke =  am4core.color("#FF0000");
+    yAxis2.renderer.line.stroke = am4core.color('#FF0000');
     yAxis2.renderer.opposite = true;
 
     // Create series
@@ -93,7 +96,7 @@ export default class Stats extends React.Component {
     normalBM.strokeWidth = 1;
     normalBM.fillOpacity = 0;
     normalBM.tensionX = 1;
-    normalBM.stroke =  am4core.color("#FF8000");
+    normalBM.stroke = am4core.color('#FF8000');
 
     let normal = chart.series.push(new am4charts.LineSeries());
     normal.name = 'Normal (analytical)';
@@ -101,7 +104,7 @@ export default class Stats extends React.Component {
     normal.dataFields.categoryX = 'ID';
     normal.strokeWidth = 1;
     normal.tensionX = 1;
-    normal.stroke =  am4core.color("#00FF00");
+    normal.stroke = am4core.color('#00FF00');
 
     let uniform = chart.series.push(new am4charts.LineSeries());
     uniform.name = 'Uniform';
@@ -109,7 +112,7 @@ export default class Stats extends React.Component {
     uniform.dataFields.categoryX = 'ID';
     uniform.strokeWidth = 1;
     uniform.tensionX = 1;
-    uniform.stroke =  am4core.color("#00BFFF");
+    uniform.stroke = am4core.color('#00BFFF');
 
     let cfdBM = chart.series.push(new am4charts.LineSeries());
     cfdBM.name = 'CDF (Box-Muller)';
@@ -118,8 +121,7 @@ export default class Stats extends React.Component {
     cfdBM.strokeWidth = 1;
     cfdBM.tensionX = 1;
     cfdBM.yAxis = yAxis2;
-    cfdBM.stroke =  am4core.color("#FF0000");
-
+    cfdBM.stroke = am4core.color('#FF0000');
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -140,13 +142,41 @@ export default class Stats extends React.Component {
   }
 
   render() {
+    if (this.props.updateData) {
+      this.props.toggleUpdateData();
+      this.chart.data = this.createData();
+    }
     return (
       <div>
-        <div className='chart__container'>
+        <div className="chart__container">
+          <div className="stats__nav">
+            <BottomNavigation>
+              <BottomNavigationAction label="Stats" href="/stats" icon={<Restore />} />
+              <BottomNavigationAction label="Spike Train" href="/" icon={<Favorite />} />
+              <BottomNavigationAction label="Home" href="/" icon={<LocationOn />} />
+            </BottomNavigation>
+          </div>
           <StatsConfig />
         </div>
-        <div className='chart__container' ref={'chart'} />
+        <div className="chart__container" ref={'chart'} />
       </div>
-    )
+    );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    mean: state.mean,
+    stDev: state.stDev,
+    updateData: state.updateData
+  };
+}
+
+const mapDispatchToProps = {
+  toggleUpdateData
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Stats);
