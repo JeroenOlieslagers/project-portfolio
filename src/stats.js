@@ -8,8 +8,10 @@ import * as utils from './utils';
 import StatsConfig from './configDashboards/StatsConfig';
 import {connect} from 'react-redux';
 import {toggleUpdateData} from './actions';
-import {BottomNavigation, BottomNavigationAction} from '@material-ui/core';
-import {Favorite, LocationOn, Restore} from '@material-ui/icons';
+import {Paper, Grid, Typography} from '@material-ui/core';
+import NavigationBar from './NavigationBar';
+import CustomCard from './CustomCard';
+import {BarChart} from '@material-ui/icons';
 
 class Stats extends React.Component {
   constructor() {
@@ -24,7 +26,7 @@ class Stats extends React.Component {
   }
 
   createData() {
-    const samples = 1000;
+    const samples = this.props.samples;
     const mean = this.props.mean;
     const st_div = this.props.stDev;
     let chart_data = randomDataGenerator({
@@ -84,7 +86,6 @@ class Stats extends React.Component {
     yAxis2.renderer.grid.template.disabled = true;
     yAxis2.renderer.line.strokeOpacity = 1;
     yAxis2.renderer.line.strokeWidth = 2;
-    yAxis2.renderer.line.stroke = am4core.color('#FF0000');
     yAxis2.renderer.opposite = true;
 
     // Create series
@@ -96,7 +97,6 @@ class Stats extends React.Component {
     normalBM.strokeWidth = 1;
     normalBM.fillOpacity = 0;
     normalBM.tensionX = 1;
-    normalBM.stroke = am4core.color('#FF8000');
 
     let normal = chart.series.push(new am4charts.LineSeries());
     normal.name = 'Normal (analytical)';
@@ -104,7 +104,6 @@ class Stats extends React.Component {
     normal.dataFields.categoryX = 'ID';
     normal.strokeWidth = 1;
     normal.tensionX = 1;
-    normal.stroke = am4core.color('#00FF00');
 
     let uniform = chart.series.push(new am4charts.LineSeries());
     uniform.name = 'Uniform';
@@ -112,7 +111,7 @@ class Stats extends React.Component {
     uniform.dataFields.categoryX = 'ID';
     uniform.strokeWidth = 1;
     uniform.tensionX = 1;
-    uniform.stroke = am4core.color('#00BFFF');
+    uniform.hidden = true;
 
     let cfdBM = chart.series.push(new am4charts.LineSeries());
     cfdBM.name = 'CDF (Box-Muller)';
@@ -121,7 +120,6 @@ class Stats extends React.Component {
     cfdBM.strokeWidth = 1;
     cfdBM.tensionX = 1;
     cfdBM.yAxis = yAxis2;
-    cfdBM.stroke = am4core.color('#FF0000');
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -137,8 +135,9 @@ class Stats extends React.Component {
     container.paddingTop = 0;
     container.paddingBottom = 0;
 
-    // Chart padding
-    chart.paddingTop = 50;
+    // Add padding
+    chart.paddingBottom = 20;
+    chart.paddingTop = 40;
   }
 
   render() {
@@ -148,17 +147,37 @@ class Stats extends React.Component {
     }
     return (
       <div>
-        <div className="chart__container">
-          <div className="stats__nav">
-            <BottomNavigation>
-              <BottomNavigationAction label="Stats" href="/stats" icon={<Restore />} />
-              <BottomNavigationAction label="Spike Train" href="/" icon={<Favorite />} />
-              <BottomNavigationAction label="Home" href="/" icon={<LocationOn />} />
-            </BottomNavigation>
-          </div>
-          <StatsConfig />
-        </div>
-        <div className="chart__container" ref={'chart'} />
+        <NavigationBar />
+        <Grid container spacing={3} className={'stats__grid'}>
+          <Grid item xs={12}>
+            <Paper className={'stats__text'}>
+              <Typography variant={'h4'} align={'center'} gutterBottom={true}>
+                Transforming Random Variable Distributions
+              </Typography>
+              <Typography>
+                This section compares the performance of an artificially created normal distribution
+                from the uniform distribution provided by Javascript's Math.random() function. In order
+                to achieve this, a method called the
+                <a href={'https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform'}>
+                  Box-Muller transform
+                </a>
+                was used. In the graph below,
+                we can see its performance in a histogram compared to the analytic function of the
+                normal distribution. There is also an option to show the source of the random variable
+                by ticking the 'Uniform' legend which will show raw output from Math.random(). The CDF
+                of our transformed distribution is also shown to further our comparison.
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <CustomCard title={'Probability Distribution Histograms'} avatar={<BarChart />}>
+              <div className={'stats__chart'} ref={'chart'} />
+            </CustomCard>
+          </Grid>
+          <Grid item xs={12}>
+            <StatsConfig />
+          </Grid>
+        </Grid>
       </div>
     );
   }
@@ -168,6 +187,7 @@ function mapStateToProps(state) {
   return {
     mean: state.mean,
     stDev: state.stDev,
+    samples: state.samples,
     updateData: state.updateData
   };
 }

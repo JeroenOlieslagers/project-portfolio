@@ -8,11 +8,20 @@ import * as serviceWorker from './serviceWorker';
 import produce from 'immer';
 import {BrowserRouter} from 'react-router-dom';
 import {linToLog} from './utils';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
 const initialState = {
   mean: 100,
   stDev: 10,
-  updateData: false
+  samples: 1000,
+  updateData: false,
+  selectedTab: 'home'
 };
 
 function reducer(state = initialState, action) {
@@ -42,6 +51,11 @@ function reducer(state = initialState, action) {
         ...state,
         updateData: !state.updateData
       };
+    case 'SET_TAB':
+      return {
+        ...state,
+        selectedTab: action.value
+      };
     default:
       return state;
   }
@@ -51,7 +65,9 @@ const store = createStore(reducer);
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <MuiThemeProvider theme={theme}>
+        <App />
+      </MuiThemeProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

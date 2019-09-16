@@ -1,6 +1,5 @@
 import React from 'react';
 import {Slider, Input, Grid, Typography} from '@material-ui/core';
-import {BarChart} from '@material-ui/icons';
 import {logToLin} from '../utils';
 
 export default class SliderInput extends React.Component {
@@ -12,7 +11,7 @@ export default class SliderInput extends React.Component {
         </Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <BarChart />
+            {this.props.icon}
           </Grid>
           <Grid item xs>
             <Slider
@@ -20,7 +19,7 @@ export default class SliderInput extends React.Component {
               onChange={(event, newValue) => this.props.sliderChange(event, newValue, this.props.valueName)}
               onChangeCommitted={this.props.toggleUpdateData}
               aria-labelledby="input-slider"
-              max={46}
+              max={logToLin(this.props.max)}
             />
           </Grid>
           <Grid item>
@@ -29,7 +28,7 @@ export default class SliderInput extends React.Component {
               value={this.props.value}
               margin="dense"
               onChange={(event) => this.props.inputChange(event, this.props.valueName)}
-              onBlur={() => this.props.handleBlur(this.props.valueName)}
+              onBlur={() => this.props.handleBlur(this.props.valueName, this.props.max)}
               inputProps={{
                 'aria-labelledby': 'input-slider'
               }}

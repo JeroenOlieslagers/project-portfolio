@@ -19,25 +19,45 @@ body {
   width: 100%;
 }
 
-.chart__container {
-  width: 90vw;
-  height: 29rem;
-  margin: auto;
-}
-
 .stats {
-  &__nav {
+  &__chart {
+    height: 28rem;
+  }
+  &__grid {
+    width: 90vw !important;
+    margin: auto !important;
+  }
+  &__text {
+    margin-top: 4rem;
     padding: 2rem;
   }
-  &__config {
-    height: 20rem;
+}
+
+.card {
+  margin-bottom: 3rem;
+  &__header {
+    border-bottom: 2px solid #909090;
+    padding: 0.5rem 2rem !important;
+    &__content {
+      display: flex;
+      justify-content: space-between;
+    }
+    &__title {
+      line-height: 3rem !important;
+    }
+    &__expand {
+      transform: rotate(0deg);
+      transition: transform 0.15s !important;
+      &--open {
+        transform: rotate(180deg);
+      }
+    }
   }
 }
 
 .slider {
   &__container {
-    width: 20rem;
-    padding: 3rem;
+    padding: 1rem;
   }
   &__input {
     width: 3.5rem;
