@@ -6,17 +6,14 @@ import {connect} from 'react-redux';
 class NavigationBar extends React.Component {
   render()
   {
-    console.log(this.props.selectedTab);
     return (
       <HideOnScroll>
         <AppBar>
-          <Tabs indicatorColor="primary"
-                textColor="primary"
-                centered value={this.props.selectedTab}
+          <Tabs centered value={this.props.selectedTab}
                 onChange={this.props.setTab}>
-            <Tab label="Home" href="/" value={'home'}/>
-            <Tab label="Stats" href="/stats" value={'stats'}/>
-            <Tab label="Spike Trains" href="/spikeTrains" value={'spikeTrains'}/>
+            <Tab label="Home" value={'home'}/>
+            <Tab label="Stats" value={'stats'}/>
+            <Tab label="Spike Trains" value={'spikeTrains'}/>
           </Tabs>
         </AppBar>
       </HideOnScroll>

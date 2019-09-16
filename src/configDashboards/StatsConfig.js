@@ -14,7 +14,7 @@ class StatsConfig extends React.Component {
 
   render() {
     return (
-      <CustomCard title={'Graph Configuration'} avatar={<Tune />}>
+      <CustomCard className={'stats__config-card'} title={'Graph Configuration'} avatar={<Tune />}>
         <Grid container>
           <Grid item xs={6}>
             <SliderInput

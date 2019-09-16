@@ -15,11 +15,22 @@ body {
   a {
     color: #191c1f;
   }
-  background: linear-gradient(4deg, mix(white, #282c34, 3), mix(white, #282c34, 7));
+  background: #282c34;
   width: 100%;
 }
 
+.link {
+  color: #7568ff !important;
+}
+
+.invisible {
+  display: none;
+}
+
 .stats {
+  &__config-card {
+    margin-bottom: 3rem !important;
+  }
   &__chart {
     height: 28rem;
   }
@@ -34,7 +45,6 @@ body {
 }
 
 .card {
-  margin-bottom: 3rem;
   &__header {
     border-bottom: 2px solid #909090;
     padding: 0.5rem 2rem !important;
@@ -56,6 +66,7 @@ body {
 }
 
 .slider {
+  color: #7568ff !important;
   &__container {
     padding: 1rem;
   }

@@ -4,24 +4,40 @@ import './App.css';
 import Stats from './stats';
 import {Switch, Route} from 'react-router-dom';
 import NavigationBar from './NavigationBar';
+import {connect} from 'react-redux';
 
-function App() {
-  const Header = () => {
+class App extends React.Component {
+  render() {
     return (
-      <header className="App-header">
+      <div>
         <NavigationBar/>
-        <img src={logo} className="App-logo" alt="logo" />
-        Data Visualisation
-      </header>
-    );
-  };
+        <div className={this.props.selectedTab === 'home' ? '' : 'invisible'}>
+          <header className={'App-header'}>
+            <img src={logo} className="App-logo" alt="logo"/>
+            Data Visualisation
+          </header>
+        </div>
+        <div className={this.props.selectedTab === 'stats' ? '' : 'invisible'}>
+          <Stats/>
+        </div>
+      </div>
+    )
+  }
 
-  return (
-    <Switch>
-      <Route exact path="/" component={Header} />
-      <Route path="/stats" component={Stats} />
-    </Switch>
-  );
+  // return (
+  //   <Switch>
+  //     <Route exact path="/" component={Header} />
+  //     <Route path="/stats" component={Stats} />
+  //   </Switch>
+  // );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    selectedTab: state.selectedTab
+  };
+}
+
+export default connect(
+  mapStateToProps
+)(App);

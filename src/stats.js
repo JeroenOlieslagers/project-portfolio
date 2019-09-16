@@ -8,10 +8,13 @@ import * as utils from './utils';
 import StatsConfig from './configDashboards/StatsConfig';
 import {connect} from 'react-redux';
 import {toggleUpdateData} from './actions';
-import {Paper, Grid, Typography} from '@material-ui/core';
+import {Paper, Grid, Typography, Link} from '@material-ui/core';
 import NavigationBar from './NavigationBar';
 import CustomCard from './CustomCard';
 import {BarChart} from '@material-ui/icons';
+import {InlineMath, BlockMath} from 'react-katex';
+import 'katex/dist/katex.min.css';
+
 
 class Stats extends React.Component {
   constructor() {
@@ -147,7 +150,6 @@ class Stats extends React.Component {
     }
     return (
       <div>
-        <NavigationBar />
         <Grid container spacing={3} className={'stats__grid'}>
           <Grid item xs={12}>
             <Paper className={'stats__text'}>
@@ -156,16 +158,25 @@ class Stats extends React.Component {
               </Typography>
               <Typography>
                 This section compares the performance of an artificially created normal distribution
-                from the uniform distribution provided by Javascript's Math.random() function. In order
-                to achieve this, a method called the
-                <a href={'https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform'}>
+                from the uniform distribution provided by Javascript's <code>Math.random()</code>
+                &nbsp;function. In order
+                to achieve this, a method called the&nbsp;
+                <Link
+                  className={'link'}
+                  href={'https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform'}>
                   Box-Muller transform
-                </a>
-                was used. In the graph below,
+                </Link>
+                &nbsp; was used.
+                In the graph below,
                 we can see its performance in a histogram compared to the analytic function of the
-                normal distribution. There is also an option to show the source of the random variable
-                by ticking the 'Uniform' legend which will show raw output from Math.random(). The CDF
-                of our transformed distribution is also shown to further our comparison.
+                normal distribution:
+                <BlockMath>{'\\large{\\mathcal{N}(x ; \\mu,\\sigma) =' +
+                ' \\frac{1}{\\sqrt{2\\pi\\sigma^2}}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}}'}</BlockMath>
+                There is also an option to show the source of the random variable
+                by ticking the 'Uniform' legend which will show raw output from <code>Math.random()</code>
+                . The CDF of our transformed distribution is also shown to further our comparison.
+                <br/>Below the graph, there is a panel that allows you to change the three parameters that define
+                the graph: the mean, variance and number of samples.
               </Typography>
             </Paper>
           </Grid>

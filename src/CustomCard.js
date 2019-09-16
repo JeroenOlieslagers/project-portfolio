@@ -10,7 +10,7 @@ export default function CustomCard(props) {
     setExpanded(!expanded);
   }
   return (
-    <Card className='card'>
+    <Card className={props.className}>
       <CardHeader className={'card__header'} disableTypography={true}
                   title={
                     <div className={'card__header__content'}>

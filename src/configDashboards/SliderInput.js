@@ -20,6 +20,7 @@ export default class SliderInput extends React.Component {
               onChangeCommitted={this.props.toggleUpdateData}
               aria-labelledby="input-slider"
               max={logToLin(this.props.max)}
+              className={'slider'}
             />
           </Grid>
           <Grid item>
