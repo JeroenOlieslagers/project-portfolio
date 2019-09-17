@@ -3,8 +3,8 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import dark from '@amcharts/amcharts4/themes/dark';
 import animated from '@amcharts/amcharts4/themes/animated';
-import randomDataGenerator from './randomDataGenerator';
-import * as utils from './utils';
+import randomDataGenerator from './components/randomDataGenerator';
+import * as utils from './components/utils';
 
 export default class SpikeTrain extends React.Component {
   constructor() {

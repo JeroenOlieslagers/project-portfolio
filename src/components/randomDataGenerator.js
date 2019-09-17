@@ -76,17 +76,12 @@ function generateChartData({
   //Set initial independent variables around typical
   dependent.forEach((item, index) => {
     startingDataPoint[item.name] = Math.round(
-      Normal(item.typical, item.typical / variance_divisor) /
-        (timeRange ? (timeRange > 1 ? 1 : 24) : 1)
+      Normal(item.typical, item.typical / variance_divisor) / (timeRange ? (timeRange > 1 ? 1 : 24) : 1)
     );
   });
   let prevDataPoint = startingDataPoint;
   //Loop through time range or 100 data points if unspecified
-  for (
-    let i = 0;
-    i < (countries ? countries.length : timeRange ? (timeRange > 1 ? timeRange : 24) : 100);
-    i++
-  ) {
+  for (let i = 0; i < (countries ? countries.length : timeRange ? (timeRange > 1 ? timeRange : 24) : 100); i++) {
     let newDataPoint = {};
     //Add independent variable
     if (independent === 'date' && timeRange !== 1) {
@@ -123,10 +118,7 @@ function generateChartData({
       ) {
         newDataPoint[item.name] = 0;
       }
-      if (
-        (rules.includes('percent') || item.rules.includes('percent')) &&
-        newDataPoint[item.name] > 100
-      ) {
+      if ((rules.includes('percent') || item.rules.includes('percent')) && newDataPoint[item.name] > 100) {
         newDataPoint[item.name] = 100;
       }
       if (item.rules.includes('fitsToMax') && newDataPoint[item.name] > fittingValue) {

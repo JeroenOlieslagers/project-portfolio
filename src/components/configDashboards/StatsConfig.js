@@ -1,10 +1,10 @@
 import React from 'react';
-import {Grid} from '@material-ui/core';
+import {Grid, Checkbox, FormControlLabel, FormHelperText, FormControl, FormGroup} from '@material-ui/core';
 import SliderInput from './SliderInput';
-import {clipMean, inputChange, sliderChange, toggleUpdateData} from '../actions';
+import {clipMean, inputChange, sliderChange, toggleUpdateData, togglePerformanceChart} from '../../actions';
 import {GraphicEq, ScatterPlot, BlurOn, Tune} from '@material-ui/icons';
 import {connect} from 'react-redux';
-import CustomCard from '../CustomCard'
+import CustomCard from '../CustomCard';
 
 class StatsConfig extends React.Component {
   handleBlur = (valueName, max) => {
@@ -38,7 +38,7 @@ class StatsConfig extends React.Component {
               sliderChange={this.props.sliderChange}
               toggleUpdateData={this.props.toggleUpdateData}
               handleBlur={this.handleBlur}
-              max={10000}
+              max={1000}
               icon={<BlurOn />}
             />
           </Grid>
@@ -55,6 +55,19 @@ class StatsConfig extends React.Component {
               icon={<ScatterPlot />}
             />
           </Grid>
+          <Grid item xs={6}>
+            <FormControl component="fieldset" className={'stats__performance-chart'}>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={this.props.performanceChart} onChange={this.props.togglePerformanceChart} />
+                  }
+                  label="Performance Chart"
+                />
+              </FormGroup>
+              <FormHelperText margin="dense">Tick for faster rendering (recommended at high variances)</FormHelperText>
+            </FormControl>
+          </Grid>
         </Grid>
       </CustomCard>
     );
@@ -65,7 +78,8 @@ function mapStateToProps(state) {
   return {
     mean: state.mean,
     stDev: state.stDev,
-    samples: state.samples
+    samples: state.samples,
+    performanceChart: state.performanceChart
   };
 }
 
@@ -73,11 +87,11 @@ const mapDispatchToProps = {
   sliderChange,
   inputChange,
   clipMean,
-  toggleUpdateData
+  toggleUpdateData,
+  togglePerformanceChart
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(StatsConfig);
-

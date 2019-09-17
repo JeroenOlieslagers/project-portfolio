@@ -10,9 +10,7 @@ export default class SliderInput extends React.Component {
           {this.props.label}
         </Typography>
         <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            {this.props.icon}
-          </Grid>
+          <Grid item>{this.props.icon}</Grid>
           <Grid item xs>
             <Slider
               value={logToLin(this.props.value)}
@@ -28,7 +26,7 @@ export default class SliderInput extends React.Component {
               className="slider__input"
               value={this.props.value}
               margin="dense"
-              onChange={(event) => this.props.inputChange(event, this.props.valueName)}
+              onChange={event => this.props.inputChange(event, this.props.valueName)}
               onBlur={() => this.props.handleBlur(this.props.valueName, this.props.max)}
               inputProps={{
                 'aria-labelledby': 'input-slider'

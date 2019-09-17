@@ -3,25 +3,25 @@ import logo from './logo.svg';
 import './App.css';
 import Stats from './stats';
 import {Switch, Route} from 'react-router-dom';
-import NavigationBar from './NavigationBar';
+import NavigationBar from './components/NavigationBar';
 import {connect} from 'react-redux';
 
 class App extends React.Component {
   render() {
     return (
       <div>
-        <NavigationBar/>
+        <NavigationBar />
         <div className={this.props.selectedTab === 'home' ? '' : 'invisible'}>
           <header className={'App-header'}>
-            <img src={logo} className="App-logo" alt="logo"/>
+            <img src={logo} className="App-logo" alt="logo" />
             Data Visualisation
           </header>
         </div>
         <div className={this.props.selectedTab === 'stats' ? '' : 'invisible'}>
-          <Stats/>
+          <Stats />
         </div>
       </div>
-    )
+    );
   }
 
   // return (
@@ -38,6 +38,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps
-)(App);
+export default connect(mapStateToProps)(App);

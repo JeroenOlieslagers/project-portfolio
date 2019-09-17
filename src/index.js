@@ -7,7 +7,7 @@ import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import produce from 'immer';
 import {BrowserRouter} from 'react-router-dom';
-import {linToLog} from './utils';
+import {linToLog} from './components/utils';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
 
 const theme = createMuiTheme({
@@ -16,7 +16,7 @@ const theme = createMuiTheme({
     secondary: {
       main: '#FFFFFF'
     }
-  },
+  }
 });
 
 const initialState = {
@@ -24,28 +24,29 @@ const initialState = {
   stDev: 10,
   samples: 1000,
   updateData: false,
-  selectedTab: 'home'
+  selectedTab: 'home',
+  performanceChart: false
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
     case 'SLIDER_CHANGE':
       return produce(state, draft => {
-        draft[action.value] = linToLog(action.newValue)
+        draft[action.value] = linToLog(action.newValue);
       });
     case 'INPUT_CHANGE':
       return produce(state, draft => {
-        draft[action.value] = action.event.target.value === '' ? '' : Number(action.event.target.value)
+        draft[action.value] = action.event.target.value === '' ? '' : Number(action.event.target.value);
       });
     case 'CLIP_MEAN':
       if (state[action.value] > action.max) {
         return produce(state, draft => {
-          draft[action.value] = action.max
-        })
+          draft[action.value] = action.max;
+        });
       } else if (state[action.value] < 0) {
         return produce(state, draft => {
-          draft[action.value] = 0
-        })
+          draft[action.value] = 0;
+        });
       } else {
         return state;
       }
@@ -58,6 +59,12 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         selectedTab: action.value
+      };
+    case 'TOGGLE_PERFORMANCE_CHART':
+      return {
+        ...state,
+        performanceChart: !state.performanceChart,
+        updateData: !state.updateData
       };
     default:
       return state;

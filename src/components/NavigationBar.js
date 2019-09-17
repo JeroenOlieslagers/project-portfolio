@@ -1,29 +1,27 @@
 import {AppBar, Slide, Tab, Tabs, useScrollTrigger} from '@material-ui/core';
 import React from 'react';
-import {setTab} from './actions';
+import {setTab} from '../actions';
 import {connect} from 'react-redux';
 
 class NavigationBar extends React.Component {
-  render()
-  {
+  render() {
     return (
       <HideOnScroll>
         <AppBar>
-          <Tabs centered value={this.props.selectedTab}
-                onChange={this.props.setTab}>
-            <Tab label="Home" value={'home'}/>
-            <Tab label="Stats" value={'stats'}/>
-            <Tab label="Spike Trains" value={'spikeTrains'}/>
+          <Tabs centered value={this.props.selectedTab} onChange={this.props.setTab}>
+            <Tab label="Home" value={'home'} />
+            <Tab label="Stats" value={'stats'} />
+            <Tab label="Spike Trains" value={'spikeTrains'} />
           </Tabs>
         </AppBar>
       </HideOnScroll>
-    )
+    );
   }
 }
 
 function HideOnScroll(props) {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({ target: window ? window() : undefined });
+  const {children, window} = props;
+  const trigger = useScrollTrigger({target: window ? window() : undefined});
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
