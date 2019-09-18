@@ -18,10 +18,22 @@ function Stats() {
               This section compares the performance of an artificially created normal distribution from the uniform
               distribution provided by Javascript's <code>Math.random()</code>
               &nbsp;function. In order to achieve this, a method called the&nbsp;
-              <Link className={'link'} href={'https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform'}>
+              <Link className={'link'} target="_blank" href={'https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform'}>
                 Box-Muller transform
               </Link>
-              &nbsp; was used. In the graph below, we can see its performance in a histogram compared to the analytic
+              &nbsp; was used. If we have two uniformly distributed random variables
+              <InlineMath>{'U_1'}</InlineMath> and <InlineMath>{'U_2'}</InlineMath>, then:
+              <BlockMath>{'Z_0 = R \\cos{(\\Theta)}'}</BlockMath>
+              <BlockMath>{'Z_1 = R \\sin{(\\Theta)}'}</BlockMath>
+              where <InlineMath>{'Z_0'}</InlineMath> and <InlineMath>{'Z_1'}</InlineMath> are normally distributed
+              random variables and
+              <BlockMath>{'R^2 = -2 \\ln{U_1}'}</BlockMath>
+              <BlockMath>{'\\Theta = 2\\pi U_2'}</BlockMath>
+              this leads to the final two equations:
+              <BlockMath>{'Z_0 = \\sqrt{-2\\ln{U_1}} \\cos{(2\\pi U_2)}'}</BlockMath>
+              <InlineMath className='latex__tag'>{'(1)'}</InlineMath>
+              <BlockMath>{'Z_1 = \\sqrt{-2\\ln{U_1}} \\sin{(2\\pi U_2)}'}</BlockMath>
+              In the graph below, we can see its performance in a histogram compared to the analytic
               function of the normal distribution:
               <BlockMath>
                 {'\\large{\\mathcal{N}(x \\hspace{2pt} ; \\hspace{2pt} \\mu,\\sigma) =' +
