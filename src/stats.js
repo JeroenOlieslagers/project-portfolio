@@ -3,7 +3,9 @@ import StatsConfig from './components/configDashboards/StatsConfig';
 import {Paper, Grid, Typography, Link} from '@material-ui/core';
 import {InlineMath, BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
-import StatsChart from './components/StatsChart';
+import NormalChart from './components/NormalChart';
+import PoissonChart from './components/PoissonChart';
+import Tag from './components/Tag';
 
 function Stats() {
   return (
@@ -13,6 +15,9 @@ function Stats() {
           <Paper className={'stats__text'}>
             <Typography variant={'h4'} align={'center'} gutterBottom={true}>
               Transforming Random Variable Distributions
+            </Typography>
+            <Typography variant={'h6'} align={'center'} gutterBottom={true}>
+              Normal distributions
             </Typography>
             <Typography>
               This section compares the performance of an artificially created normal distribution from the uniform
@@ -31,8 +36,9 @@ function Stats() {
               <BlockMath>{'\\Theta = 2\\pi U_2'}</BlockMath>
               this leads to the final two equations:
               <BlockMath>{'Z_0 = \\sqrt{-2\\ln{U_1}} \\cos{(2\\pi U_2)}'}</BlockMath>
-              <InlineMath className='latex__tag'>{'(1)'}</InlineMath>
+              <Tag right={7.5} top={29.1}>1</Tag>
               <BlockMath>{'Z_1 = \\sqrt{-2\\ln{U_1}} \\sin{(2\\pi U_2)}'}</BlockMath>
+              <Tag right={7.5} top={31.8}>2</Tag>
               In the graph below, we can see its performance in a histogram compared to the analytic
               function of the normal distribution:
               <BlockMath>
@@ -49,10 +55,35 @@ function Stats() {
           </Paper>
         </Grid>
         <Grid item xs={12}>
-          <StatsChart />
+          <NormalChart />
         </Grid>
         <Grid item xs={12}>
           <StatsConfig />
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={'stats__text'}>
+            <Typography variant={'h6'} align={'center'} gutterBottom={true}>
+              Poisson distributions
+            </Typography>
+            <Typography>
+              We now turn to the Poisson distribution, another very prominent distribution that describes random events
+              happening at a constant rate independently of time. The analytic function is:
+              <BlockMath>
+                {'\\large{\\text{Po}(x\\hspace{2pt} ; \\hspace{2pt} \\lambda) = \\frac{\\lambda^x}{x!}e^{-\\lambda}}'}
+              </BlockMath>
+              To transform our uniform distribution to a Poisson one, we can use the Knuth algorithm or we can use
+              inverse transform sampling to obtain a practical estimate to the analytic distribution (
+              <Link className={'link'} target="_blank" href={'https://en.wikipedia.org/wiki/Poisson_distribution#Generating_Poisson-distributed_random_variables'}>
+                source
+              </Link>). Since the Knuth algorithm can have underflow errors at high <InlineMath>{'\\lambda'}</InlineMath>
+              &nbsp; due to the very small <InlineMath>{'e^{\\lambda}'}</InlineMath>, another algorithm is also used that
+              uses a smallest value of <InlineMath>{'e^{-\\lambda}'}</InlineMath> using a separate parameter &nbsp;
+              <InlineMath>{'{\\footnotesize{\\text{STEP}}}'}</InlineMath>.
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <PoissonChart />
         </Grid>
       </Grid>
     </div>

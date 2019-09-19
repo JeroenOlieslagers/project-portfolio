@@ -20,51 +20,67 @@ const theme = createMuiTheme({
 });
 
 const initialState = {
-  mean: 100,
-  stDev: 10,
-  samples: 1000,
-  updateData: false,
+  mean: {
+    normal: 100,
+    poisson: 100
+  },
+  stDev: {
+    normal: 10,
+    poisson: 10
+  },
+  lambda : {
+    stats: 5
+  },
+  samples: {
+    normal: 1000,
+    poisson: 1000
+  },
+  updateData: {
+    normal: false,
+    poisson: false
+  },
+  performanceChart: {
+    normal: false,
+    poisson: false
+  },
   selectedTab: 'home',
-  performanceChart: false
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
     case 'SLIDER_CHANGE':
       return produce(state, draft => {
-        draft[action.value] = linToLog(action.newValue);
+        draft[action.value][action.name] = linToLog(action.newValue);
       });
     case 'INPUT_CHANGE':
       return produce(state, draft => {
-        draft[action.value] = action.event.target.value === '' ? '' : Number(action.event.target.value);
+        draft[action.value][action.name] = action.event.target.value === '' ? '' : Number(action.event.target.value);
       });
-    case 'CLIP_MEAN':
-      if (state[action.value] > action.max) {
+    case 'CLIP':
+      if (state[action.value][action.name] > action.max) {
         return produce(state, draft => {
-          draft[action.value] = action.max;
+          draft[action.value][action.name] = action.max;
         });
-      } else if (state[action.value] < 0) {
+      } else if (state[action.value][action.name] < 0) {
         return produce(state, draft => {
-          draft[action.value] = 0;
+          draft[action.value][action.name] = 0;
         });
       } else {
         return state;
       }
     case 'TOGGLE_UPDATE_DATA':
-      return {
-        ...state,
-        updateData: !state.updateData
-      };
+      return produce(state, draft => {
+        draft.updateData[action.name] = !state.updateData[action.name];
+      });
+    case 'TOGGLE_PERFORMANCE_CHART':
+      return produce(state, draft => {
+        draft.updateData[action.name] = !state.updateData[action.name];
+        draft.performanceChart[action.name] = !state.performanceChart[action.name];
+      });
     case 'SET_TAB':
       return {
         ...state,
         selectedTab: action.value
-      };
-    case 'TOGGLE_PERFORMANCE_CHART':
-      return {
-        ...state,
-        performanceChart: !state.performanceChart,
-        updateData: !state.updateData
       };
     default:
       return state;

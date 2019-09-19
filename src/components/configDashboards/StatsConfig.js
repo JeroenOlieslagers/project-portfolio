@@ -1,26 +1,27 @@
 import React from 'react';
 import {Grid, Checkbox, FormControlLabel, FormHelperText, FormControl, FormGroup} from '@material-ui/core';
 import SliderInput from './SliderInput';
-import {clipMean, inputChange, sliderChange, toggleUpdateData, togglePerformanceChart} from '../../actions';
+import {clip, inputChange, sliderChange, toggleUpdateData, togglePerformanceChart} from '../../actions';
 import {GraphicEq, ScatterPlot, BlurOn, Tune} from '@material-ui/icons';
 import {connect} from 'react-redux';
 import CustomCard from '../CustomCard';
 
 class StatsConfig extends React.Component {
-  handleBlur = (valueName, max) => {
-    this.props.clipMean(max, valueName);
-    this.props.toggleUpdateData();
+  handleBlur = (valueName, max, name) => {
+    this.props.clip(max, valueName, name);
+    this.props.toggleUpdateData(name);
   };
 
   render() {
     return (
-      <CustomCard className={'stats__config-card'} title={'Graph Configuration'} avatar={<Tune />}>
+      <CustomCard title={'Graph Configuration'} avatar={<Tune />}>
         <Grid container>
           <Grid item xs={6}>
             <SliderInput
               label={'Mean'}
+              name={'normal'}
               valueName={'mean'}
-              value={this.props.mean}
+              value={this.props.mean.normal}
               inputChange={this.props.inputChange}
               sliderChange={this.props.sliderChange}
               toggleUpdateData={this.props.toggleUpdateData}
@@ -32,8 +33,9 @@ class StatsConfig extends React.Component {
           <Grid item xs={6}>
             <SliderInput
               label={'Standard Deviation'}
+              name={'normal'}
               valueName={'stDev'}
-              value={this.props.stDev}
+              value={this.props.stDev.normal}
               inputChange={this.props.inputChange}
               sliderChange={this.props.sliderChange}
               toggleUpdateData={this.props.toggleUpdateData}
@@ -45,8 +47,9 @@ class StatsConfig extends React.Component {
           <Grid item xs={6}>
             <SliderInput
               label={'Samples'}
+              name={'normal'}
               valueName={'samples'}
-              value={this.props.samples}
+              value={this.props.samples.normal}
               inputChange={this.props.inputChange}
               sliderChange={this.props.sliderChange}
               toggleUpdateData={this.props.toggleUpdateData}
@@ -60,7 +63,7 @@ class StatsConfig extends React.Component {
               <FormGroup>
                 <FormControlLabel
                   control={
-                    <Checkbox checked={this.props.performanceChart} onChange={this.props.togglePerformanceChart} />
+                    <Checkbox checked={this.props.performanceChart.normal} onChange={() => this.props.togglePerformanceChart('normal')} />
                   }
                   label="Performance Chart"
                 />
@@ -86,7 +89,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   sliderChange,
   inputChange,
-  clipMean,
+  clip,
   toggleUpdateData,
   togglePerformanceChart
 };
