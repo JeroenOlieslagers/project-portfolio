@@ -23,7 +23,7 @@ class PoissonChart extends React.Component {
   }
 
   createData() {
-    const lambda = this.props.lambda.stats;
+    const lambda = this.props.lambda.poisson;
     const samples = this.props.samples.poisson;
     let chart_data = randomDataGenerator({
       samples: samples,
@@ -32,34 +32,46 @@ class PoissonChart extends React.Component {
           name: 'column-1',
           mean: lambda,
           rules: ['poisson', 'positive']
-        },
-        {
-          name: 'column-3',
-          mean: lambda,
-          stDev: lambda,
-          rules: ['uniform']
         }
       ]
     });
-    let dummy = utils.createHistogram(chart_data);
+    let d = utils.createHistogram(chart_data);
+    //Dealing with negatives is not as easy as it may seem
+    let positiveData = d[0];
+    let positiveKeys =Object.keys(positiveData);
+    let negativeData = d[1];
+    let negativeKeys = Object.keys(negativeData).sort((a, b) => {
+      return Number(a) - Number(b)
+    });
+    let keys = negativeKeys.concat(positiveKeys);
+    let dummy = [];
     let data = [];
     /**
      * Converts to data object that is readable by amcharts and add analytical and CFD functions
      */
-    Object.keys(dummy).forEach((item, index) => {
+    keys.forEach((item, index) => {
+      if (Math.sign(Number(item)) === -1) {
+        data = negativeData;
+      }
+      else {
+        data = positiveData;
+      }
       let dataPoint = {};
-      dataPoint['id'] = item;
-      dataPoint['column-1'] = dummy[item]['column-1'];
+      dataPoint['id'] = Number(item);
+      dataPoint['column-1'] = data[item]['column-1'];
       dataPoint['column-2'] = Math.round(utils.Poisson(lambda, parseInt(item, 10)) * samples);
-      dataPoint['column-3'] = dummy[item]['column-3'];
-      if (!data[0]) {
+      if (!dummy[0]) {
         dataPoint['column-4'] = dataPoint['column-2'];
       } else {
-        dataPoint['column-4'] = data[index - 1]['column-4'] + dataPoint['column-2'];
+        dataPoint['column-4'] = dummy[index - 1]['column-4'] + dataPoint['column-2'];
       }
-      data.push(dataPoint);
+      dummy.push(dataPoint);
     });
-    return data;
+    let hasZero = false;
+    if (negativeKeys.length !== 0) {
+      hasZero = true;
+    }
+    return [dummy, hasZero];
   }
 
   createChart() {
@@ -79,15 +91,23 @@ class PoissonChart extends React.Component {
     chart.categoryField = 'category';
 
     // Add data
-    chart.data = this.createData();
+    let dummy = this.createData();
+    chart.data = dummy[0];
+    let hasZero = dummy[1];
 
     // Create axes
     let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    xAxis.renderer.baseGrid.disabled = true;
     xAxis.id = 'xAxis';
     xAxis.dataFields.category = 'id';
     xAxis.renderer.grid.strokeDasharray = 3;
-
+    // Zero line
+    this.range = xAxis.axisRanges.create();
+    this.range.category = hasZero ? 0 : undefined;
+    this.range.label.paddingTop = 2;
+    this.range.label.fontSize = 12;
+    this.range.grid.stroke = am4core.color("grey");
+    this.range.grid.strokeWidth = 1;
+    this.range.grid.strokeOpacity = 0.7;
     let yAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis1.renderer.grid.strokeDasharray = 3;
 
@@ -120,14 +140,6 @@ class PoissonChart extends React.Component {
     poisson.dataFields.categoryX = 'id';
     poisson.strokeWidth = 1;
     poisson.tensionX = 1;
-
-    let uniform = chart.series.push(new am4charts.LineSeries());
-    uniform.name = 'Uniform';
-    uniform.dataFields.valueY = 'column-3';
-    uniform.dataFields.categoryX = 'id';
-    uniform.strokeWidth = 1;
-    uniform.tensionX = 1;
-    uniform.hidden = true;
 
     let cfd = chart.series.push(new am4charts.LineSeries());
     cfd.name = 'CDF (analytical)';
@@ -169,7 +181,12 @@ class PoissonChart extends React.Component {
         this.prevPerf = !this.prevPerf;
         this.createChart();
       } else if (this.props.updateData.poisson) {
-        this.chart.data = this.createData();
+        // Resets zero line if zero not in view
+        let dummy = this.createData();
+        this.chart.data = dummy[0];
+        let hasZero = dummy[1];
+        this.range.category = hasZero ? 0 : undefined;
+        this.range.grid.strokeOpacity = hasZero ? 0.7 : 0;
       }
       this.props.toggleUpdateData('poisson');
     }
@@ -183,9 +200,7 @@ class PoissonChart extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    mean: state.mean,
     lambda: state.lambda,
-    stDev: state.stDev,
     samples: state.samples,
     updateData: state.updateData,
     performanceChart: state.performanceChart

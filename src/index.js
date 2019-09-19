@@ -21,7 +21,7 @@ const theme = createMuiTheme({
 
 const initialState = {
   mean: {
-    normal: 100,
+    normal: 1,
     poisson: 100
   },
   stDev: {
@@ -29,7 +29,7 @@ const initialState = {
     poisson: 10
   },
   lambda : {
-    stats: 5
+    poisson: 5
   },
   samples: {
     normal: 1000,

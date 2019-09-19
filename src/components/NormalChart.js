@@ -43,25 +43,44 @@ class NormalChart extends React.Component {
         }
       ]
     });
-    let dummy = utils.createHistogram(chart_data);
+    let d = utils.createHistogram(chart_data);
+    //Dealing with negatives is not as easy as it may seem
+    let positiveData = d[0];
+    let positiveKeys =Object.keys(positiveData);
+    let negativeData = d[1];
+    let negativeKeys = Object.keys(negativeData).sort((a, b) => {
+      return Number(a) - Number(b)
+    });
+    let keys = negativeKeys.concat(positiveKeys);
+    let dummy = [];
     let data = [];
     /**
      * Converts to data object that is readable by amcharts and add analytical and CFD functions
      */
-    Object.keys(dummy).forEach((item, index) => {
-      let dataPoint = {};
-      dataPoint['id'] = item;
-      dataPoint['column-1'] = dummy[item]['column-1'];
-      dataPoint['column-2'] = Math.round(utils.Gaussian(mean, stDev, parseInt(item, 10)) * samples);
-      dataPoint['column-3'] = dummy[item]['column-3'];
-      if (!data[0]) {
-        dataPoint['column-4'] = dummy[item]['column-1'];
-      } else {
-        dataPoint['column-4'] = data[index - 1]['column-4'] + dummy[item]['column-1'];
+    keys.forEach((item, index) => {
+      if (Math.sign(Number(item)) === -1) {
+        data = negativeData;
       }
-      data.push(dataPoint);
+      else {
+        data = positiveData;
+      }
+      let dataPoint = {};
+      dataPoint['id'] = Number(item);
+      dataPoint['column-1'] = data[item]['column-1'];
+      dataPoint['column-2'] = Math.round(utils.Gaussian(mean, stDev, parseInt(item, 10)) * samples);
+      dataPoint['column-3'] = data[item]['column-3'];
+      if (!dummy[0]) {
+        dataPoint['column-4'] = dataPoint['column-1'];
+      } else {
+        dataPoint['column-4'] = dummy[index - 1]['column-4'] + data[item]['column-1'];
+      }
+      dummy.push(dataPoint);
     });
-    return data;
+    let hasZero = false;
+    if (negativeKeys.length !== 0) {
+      hasZero = true;
+    }
+    return [dummy, hasZero];
   }
 
   createChart() {
@@ -81,13 +100,22 @@ class NormalChart extends React.Component {
     chart.categoryField = 'category';
 
     // Add data
-    chart.data = this.createData();
+    let dummy = this.createData();
+    chart.data = dummy[0];
+    let hasZero = dummy[1];
 
     // Create axes
     let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    xAxis.id = 'xAxis';
     xAxis.dataFields.category = 'id';
     xAxis.renderer.grid.strokeDasharray = 3;
+    // Zero line
+    this.range = xAxis.axisRanges.create();
+    this.range.category = hasZero ? 0 : undefined;
+    this.range.label.paddingTop = 2;
+    this.range.label.fontSize = 12;
+    this.range.grid.stroke = am4core.color("grey");
+    this.range.grid.strokeWidth = 1;
+    this.range.grid.strokeOpacity = 0.7;
 
     let yAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis1.renderer.grid.strokeDasharray = 3;
@@ -170,7 +198,12 @@ class NormalChart extends React.Component {
         this.prevPerf = !this.prevPerf;
         this.createChart();
       } else if (this.props.updateData.normal) {
-        this.chart.data = this.createData();
+        // Resets zero line if zero not in view
+        let dummy = this.createData();
+        this.chart.data = dummy[0];
+        let hasZero = dummy[1];
+        this.range.category = hasZero ? 0 : undefined;
+        this.range.grid.strokeOpacity = hasZero ? 0.7 : 0;
       }
       this.props.toggleUpdateData('normal');
     }

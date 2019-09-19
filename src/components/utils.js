@@ -67,15 +67,17 @@ export function InverseTransformSampling(lambda = 0) {
  */
 export function createHistogram(data) {
   console.time('histogram');
+  let positives = [];
+  let negatives = [];
   let hist = [];
-  let max = 0;
   let keys = Object.keys(data[0]).slice(1, data.length);
   data.forEach(item => {
     keys.forEach(key => {
       if (Math.sign(item[key]) === -1) {
-        if (Math.abs(item[key]) > max) {
-          max = Math.abs(item[key])
-        }
+        hist = negatives
+      }
+      else {
+        hist = positives
       }
       if (!hist[item[key]]) {
         hist[item[key]] = {};
@@ -89,10 +91,8 @@ export function createHistogram(data) {
       }
     });
   });
-  // let negatives = hist.splice(hist.length - max + 1, max)
   console.timeEnd('histogram');
-  console.log(max, hist);
-  return hist;
+  return [positives, negatives];
 }
 
 /**

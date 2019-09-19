@@ -1,5 +1,6 @@
 import React from 'react';
-import StatsConfig from './components/configDashboards/StatsConfig';
+import NormalConfig from './components/configDashboards/NormalConfig';
+import PoissonConfig from './components/configDashboards/PoissonConfig';
 import {Paper, Grid, Typography, Link} from '@material-ui/core';
 import {InlineMath, BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
@@ -58,7 +59,7 @@ function Stats() {
           <NormalChart />
         </Grid>
         <Grid item xs={12}>
-          <StatsConfig />
+          <NormalConfig />
         </Grid>
         <Grid item xs={12}>
           <Paper className={'stats__text'}>
@@ -84,6 +85,9 @@ function Stats() {
         </Grid>
         <Grid item xs={12}>
           <PoissonChart />
+        </Grid>
+        <Grid item xs={12}>
+          <PoissonConfig />
         </Grid>
       </Grid>
     </div>

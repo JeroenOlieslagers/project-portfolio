@@ -2,11 +2,11 @@ import React from 'react';
 import {Grid, Checkbox, FormControlLabel, FormHelperText, FormControl, FormGroup} from '@material-ui/core';
 import SliderInput from './SliderInput';
 import {clip, inputChange, sliderChange, toggleUpdateData, togglePerformanceChart} from '../../actions';
-import {GraphicEq, ScatterPlot, BlurOn, Tune} from '@material-ui/icons';
+import {GraphicEq, ScatterPlot, Tune} from '@material-ui/icons';
 import {connect} from 'react-redux';
 import CustomCard from '../CustomCard';
 
-class StatsConfig extends React.Component {
+class PoissonConfig extends React.Component {
   handleBlur = (valueName, max, name) => {
     this.props.clip(max, valueName, name);
     this.props.toggleUpdateData(name);
@@ -18,38 +18,24 @@ class StatsConfig extends React.Component {
         <Grid container>
           <Grid item xs={6}>
             <SliderInput
-              label={'Mean'}
-              name={'normal'}
-              valueName={'mean'}
-              value={this.props.mean.normal}
+              label={'Lambda'}
+              name={'poisson'}
+              valueName={'lambda'}
+              value={this.props.lambda.poisson}
               inputChange={this.props.inputChange}
               sliderChange={this.props.sliderChange}
               toggleUpdateData={this.props.toggleUpdateData}
               handleBlur={this.handleBlur}
-              max={100000}
+              max={745}
               icon={<GraphicEq />}
             />
           </Grid>
           <Grid item xs={6}>
             <SliderInput
-              label={'Standard Deviation'}
-              name={'normal'}
-              valueName={'stDev'}
-              value={this.props.stDev.normal}
-              inputChange={this.props.inputChange}
-              sliderChange={this.props.sliderChange}
-              toggleUpdateData={this.props.toggleUpdateData}
-              handleBlur={this.handleBlur}
-              max={1000}
-              icon={<BlurOn />}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <SliderInput
               label={'Samples'}
-              name={'normal'}
+              name={'poisson'}
               valueName={'samples'}
-              value={this.props.samples.normal}
+              value={this.props.samples.poisson}
               inputChange={this.props.inputChange}
               sliderChange={this.props.sliderChange}
               toggleUpdateData={this.props.toggleUpdateData}
@@ -63,7 +49,7 @@ class StatsConfig extends React.Component {
               <FormGroup>
                 <FormControlLabel
                   control={
-                    <Checkbox checked={this.props.performanceChart.normal} onChange={() => this.props.togglePerformanceChart('normal')} />
+                    <Checkbox checked={this.props.performanceChart.poisson} onChange={() => this.props.togglePerformanceChart('poisson')} />
                   }
                   label="Performance Chart"
                 />
@@ -79,8 +65,7 @@ class StatsConfig extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    mean: state.mean,
-    stDev: state.stDev,
+    lambda: state.lambda,
     samples: state.samples,
     performanceChart: state.performanceChart
   };
@@ -97,4 +82,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(StatsConfig);
+)(PoissonConfig);
