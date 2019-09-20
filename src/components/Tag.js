@@ -5,9 +5,10 @@ import React from 'react';
 export default function Tag(props) {
   const classes = makeStyles(theme => ({
     tag: {
-      position: 'absolute',
-      right: props.right.toString() + 'rem',
-      top: props.top.toString() + 'rem'
+      position: 'relative',
+      right: props.right.toString() + 'vw',
+      top: props.top.toString() + 'vh',
+      height: 0
     }
   }))();
 
