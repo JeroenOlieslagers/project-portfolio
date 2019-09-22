@@ -42,6 +42,13 @@ body {
     margin-top: 4rem;
     padding: 2rem;
   }
+  &__tab {
+    flex-direction: row-reverse !important;
+    justify-content: space-evenly !important;
+  }
+  &__menu {
+    width: 10rem !important;
+  }
 }
 
 .card {

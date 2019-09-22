@@ -1,10 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Stats from './stats';
 import {Switch, Route} from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import {connect} from 'react-redux';
+import Normal from './Normal';
+import Poisson from './Poisson';
 
 class App extends React.Component {
   render() {
@@ -17,8 +18,11 @@ class App extends React.Component {
             Data Visualisation
           </header>
         </div>
-        <div className={this.props.selectedTab === 'stats' ? '' : 'invisible'}>
-          <Stats />
+        <div className={this.props.selectedTab === 'normal' ? '' : 'invisible'}>
+          <Normal />
+        </div>
+        <div className={this.props.selectedTab === 'poisson' ? '' : 'invisible'}>
+          <Poisson />
         </div>
       </div>
     );
