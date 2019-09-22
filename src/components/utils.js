@@ -6,7 +6,6 @@ export function Gaussian(mu, sigma, x) {
   return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
 }
 
-
 /**
  * Analytically calculates the Poisson distribution
  * @return {number}
@@ -15,7 +14,14 @@ export function Poisson(lambda, x) {
   if (x < 0) {
     return 0
   }
-  return (Math.pow(lambda, x) * Math.exp(-lambda)) / (factorial(x))
+  // Lambda values greater will cause overflow errors
+  if (lambda <= 90) {
+    return (Math.pow(lambda, x) * Math.exp(-lambda)) / (factorial(x))
+  }
+  // Gaussian distribution is a good approximation at large lambda
+  else {
+    return Gaussian(lambda, Math.sqrt(lambda), x)
+  }
 }
 
 /**

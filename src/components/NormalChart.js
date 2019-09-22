@@ -22,6 +22,10 @@ class NormalChart extends React.Component {
     this.createChart();
   }
 
+  componentWillUnmount() {
+    this.chart.dispose();
+  }
+
   createData() {
     const samples = this.props.samples.normal;
     const mean = this.props.mean.normal;
@@ -188,11 +192,13 @@ class NormalChart extends React.Component {
   render() {
     if (this.props.updateData.normal) {
       if (this.props.performanceChart.normal && this.prevPerf !== this.props.performanceChart.normal) {
+        this.chart.dispose();
         am4core.options.queue = true;
         am4core.options.minPolylineStep = 5;
         this.prevPerf = !this.prevPerf;
         this.createChart();
       } else if (!this.props.performanceChart.normal && this.prevPerf !== this.props.performanceChart.normal) {
+        this.chart.dispose();
         am4core.options.queue = false;
         am4core.options.minPolylineStep = 0.5;
         this.prevPerf = !this.prevPerf;

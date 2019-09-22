@@ -22,6 +22,10 @@ class PoissonChart extends React.Component {
     this.createChart();
   }
 
+  componentWillUnmount() {
+    this.chart.dispose();
+  }
+
   createData() {
     const lambda = this.props.lambda.poisson;
     const samples = this.props.samples.poisson;
@@ -171,11 +175,13 @@ class PoissonChart extends React.Component {
   render() {
     if (this.props.updateData.poisson) {
       if (this.props.performanceChart.poisson && this.prevPerf !== this.props.performanceChart.poisson) {
+        this.chart.dispose();
         am4core.options.queue = true;
         am4core.options.minPolylineStep = 5;
         this.prevPerf = !this.prevPerf;
         this.createChart();
       } else if (!this.props.performanceChart.poisson && this.prevPerf !== this.props.performanceChart.poisson) {
+        this.chart.dispose();
         am4core.options.queue = false;
         am4core.options.minPolylineStep = 0.5;
         this.prevPerf = !this.prevPerf;
