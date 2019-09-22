@@ -42,13 +42,12 @@ body {
     margin-top: 4rem;
     padding: 2rem;
   }
-}
-
-.latex {
-  &__tag {
-    position: absolute;
-    right: 7.5rem;
-    top: 29.1rem;
+  &__tab {
+    flex-direction: row-reverse !important;
+    justify-content: space-evenly !important;
+  }
+  &__menu {
+    width: 10rem !important;
   }
 }
 
