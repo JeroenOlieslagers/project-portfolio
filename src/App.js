@@ -6,6 +6,8 @@ import NavigationBar from './components/NavigationBar';
 import {connect} from 'react-redux';
 import Normal from './Normal';
 import Poisson from './Poisson';
+import SpikeTrains from './spikeTrain';
+import IPython from './ipython';
 
 class App extends React.Component {
   render() {
@@ -23,6 +25,12 @@ class App extends React.Component {
         </div>
         <div className={this.props.selectedTab === 'poisson' ? '' : 'invisible'}>
           <Poisson />
+        </div>
+        <div className={this.props.selectedTab === 'spikeTrains' ? '' : 'invisible'}>
+          <SpikeTrains />
+        </div>
+        <div className={this.props.selectedTab === 'ipython' ? '' : 'invisible'}>
+          <IPython />
         </div>
       </div>
     );
