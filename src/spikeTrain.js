@@ -4,7 +4,10 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import dark from '@amcharts/amcharts4/themes/dark';
 import animated from '@amcharts/amcharts4/themes/animated';
 import randomDataGenerator from './components/randomDataGenerator';
+import CustomCard from './components/CustomCard';
 import * as utils from './components/utils';
+import {BarChart} from '@material-ui/icons';
+import {Grid, Paper, Typography} from '@material-ui/core';
 
 export default class SpikeTrain extends React.Component {
   constructor() {
@@ -18,14 +21,14 @@ export default class SpikeTrain extends React.Component {
   }
 
   createData() {
-    const samples = 100;
+    const samples = 10;
     const mean = 10;
-    const st_div = 2;
+    const st_div = 10;
     let chart_data = randomDataGenerator({
-      timeRange: samples,
+      samples: samples,
       variance_divisor: mean / st_div,
       isStatic: true,
-      independent: 'ID',
+      independent: 'id',
       rules: ['positive'],
       dependent: [{name: 'column-1', typical: mean, rules: []}]
     });
@@ -49,7 +52,7 @@ export default class SpikeTrain extends React.Component {
     // Create axes
     let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     xAxis.id = 'xAxis';
-    xAxis.dataFields.category = 'ID';
+    xAxis.dataFields.category = 'id';
     xAxis.renderer.grid.strokeDasharray = 3;
 
     let yAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
@@ -59,7 +62,7 @@ export default class SpikeTrain extends React.Component {
     let spikes = chart.series.push(new am4charts.ColumnSeries());
     spikes.name = 'Spike Train';
     spikes.dataFields.valueY = 'column-1';
-    spikes.dataFields.categoryX = 'ID';
+    spikes.dataFields.categoryX = 'id';
     spikes.columns.template.width = am4core.percent(1);
     spikes.strokeWidth = 1;
     spikes.tensionX = 1;
@@ -86,9 +89,23 @@ export default class SpikeTrain extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="chart" ref={'chart'} />
-      </div>
+      <Grid container spacing={3} className={'stats__grid'}>
+        <Grid item xs={12}>
+          <Paper className={'stats__text'}>
+            <Typography variant={'h4'} align={'center'} gutterBottom={true}>
+              Spike Trains <br /> &nbsp;
+            </Typography>
+            <Typography align={'center'} gutterBottom={true}>
+              This section is still under development.
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <CustomCard title={'Spike Train'} avatar={<BarChart />}>
+            <div className="stats__chart" ref={'chart'} />
+          </CustomCard>
+        </Grid>
+      </Grid>
     );
   }
 }
