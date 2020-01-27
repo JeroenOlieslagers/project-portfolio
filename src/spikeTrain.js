@@ -21,11 +21,11 @@ export default class SpikeTrain extends React.Component {
   }
 
   createData() {
-    const samples = 100;
+    const samples = 10;
     const mean = 10;
-    const st_div = 2;
+    const st_div = 10;
     let chart_data = randomDataGenerator({
-      timeRange: samples,
+      samples: samples,
       variance_divisor: mean / st_div,
       isStatic: true,
       independent: 'id',
@@ -94,6 +94,9 @@ export default class SpikeTrain extends React.Component {
           <Paper className={'stats__text'}>
             <Typography variant={'h4'} align={'center'} gutterBottom={true}>
               Spike Trains <br /> &nbsp;
+            </Typography>
+            <Typography align={'center'} gutterBottom={true}>
+              This section is still under development.
             </Typography>
           </Paper>
         </Grid>
