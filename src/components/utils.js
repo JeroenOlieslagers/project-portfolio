@@ -114,3 +114,50 @@ export function logToLin(x) {
   const y = Math.floor(Math.log10(x === 0 ? 1 : x));
   return (y === 0 ? x : Math.round(x / Math.pow(10, y))) + y * 9;
 }
+
+/**
+ * Vector (2D) class for ray tracing calculations
+ * @param x: x component of Vector
+ * @param y: y component of Vector
+ * @method vMinus: subtracts two Vectors
+ * @method vPlus: adds two Vectors
+ * @method mult: multiplies a Vector by a scalar
+ * @method dot: returns the scalar dot product between two Vectors
+ * @method set: sets x and y params of a Vector instance
+ * @method normalise: normalises the Vector accodring to the L2 norm
+ * @method p: getter method to obtain the x and y coords as array
+ * @method l22: getter method to obtain the square of the L2 norm of the vector
+ */
+export class Vector{
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+  }
+  vMinus(target){
+    return new Vector(this.x - target.x, this.y - target.y);
+  }
+  vPlus(target){
+    return new Vector(this.x + target.x, this.y + target.y);
+  }
+  mult(target){
+    return new Vector(this.x * target, this.y * target);
+  }
+  dot(target){
+    return this.x * target.x + this.y * target.y
+  }
+  set(x, y){
+    this.x = x;
+    this.y = y;
+  }
+  normalise(){
+    let l2 = Math.sqrt(this.l22);
+    this.x = this.x / l2;
+    this.y = this.y / l2;
+  }
+  get p(){
+    return [this.x, this.y]
+  }
+  get l22(){
+    return Math.pow(this.x, 2) + Math.pow(this.y, 2)
+  }
+}

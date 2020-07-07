@@ -8,6 +8,7 @@ import Normal from './Normal';
 import Poisson from './Poisson';
 import SpikeTrains from './spikeTrain';
 import IPython from './ipython';
+import RayTracing from './rayTracing';
 
 class App extends React.Component {
   render() {
@@ -28,6 +29,9 @@ class App extends React.Component {
         </div>
         <div className={this.props.selectedTab === 'spikeTrains' ? '' : 'invisible'}>
           <SpikeTrains />
+        </div>
+        <div className={this.props.selectedTab === 'rayTracing' ? '' : 'invisible'}>
+          <RayTracing />
         </div>
         <div className={this.props.selectedTab === 'ipython' ? '' : 'invisible'}>
           <IPython />

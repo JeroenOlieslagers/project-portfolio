@@ -9,9 +9,37 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+.rayPaper {
+  background-color: #282c34 !important;
+  margin: 0.5em;
+}
+
+.info{
+  font-size: 18px;
+  margin: 0.75rem;
+  display: grid;
+  grid: auto / auto auto auto auto;
+}
+.rtcard{
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+#refractiveIndex{
+  width: 3rem;
+  margin-left: 1rem;
+}
+#shootDelay{
+  width: 3rem;
+  margin-left: 1rem;
+}
+.refr{
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: left;
+}
 
 body {
-  padding-top: 0.1rem;
   a {
     color: #191c1f;
   }

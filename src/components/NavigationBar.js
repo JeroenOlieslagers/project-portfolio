@@ -42,6 +42,7 @@ class NavigationBar extends React.Component {
             <Tab label="home" value={'home'} />
             <Tab classes={{wrapper: 'stats__tab'}} label="Stats" value={this.state.statsTab} icon={<ArrowDropDown />} onClick={this.handleOpen}/>
             <Tab label="Spike Trains" value={'spikeTrains'} />
+            <Tab label="Ray Tracing" value={'rayTracing'} />
             <Tab label="IPython Notebooks" value={'ipython'} />
           </Tabs>
           <Popover
