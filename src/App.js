@@ -6,9 +6,11 @@ import NavigationBar from './components/NavigationBar';
 import {connect} from 'react-redux';
 import Normal from './Normal';
 import Poisson from './Poisson';
-import SpikeTrains from './spikeTrain';
+import Chapter1 from './neur/chapter1';
 import IPython from './ipython';
 import RayTracing from './rayTracing';
+import NeurInfo from './neur/neurInfo';
+import NeurExt from './neur/extensions';
 
 class App extends React.Component {
   render() {
@@ -27,8 +29,14 @@ class App extends React.Component {
         <div className={this.props.selectedTab === 'poisson' ? '' : 'invisible'}>
           <Poisson />
         </div>
-        <div className={this.props.selectedTab === 'spikeTrains' ? '' : 'invisible'}>
-          <SpikeTrains />
+        <div className={this.props.selectedTab === 'neurInfo' ? '' : 'invisible'}>
+          <NeurInfo />
+        </div>
+        <div className={this.props.selectedTab === 'chapter1' ? '' : 'invisible'}>
+          <Chapter1 />
+        </div>
+        <div className={this.props.selectedTab === 'neurExt' ? '' : 'invisible'}>
+          <NeurExt />
         </div>
         <div className={this.props.selectedTab === 'rayTracing' ? '' : 'invisible'}>
           <RayTracing />
