@@ -100,6 +100,27 @@ body {
   }
 }
 
+.neur {
+  &__info {
+    &__text {
+      max-width: 50rem;
+      margin-top: 4rem;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 2rem;
+    }
+    &__image {
+      padding-top: 109%;
+      margin-left: auto;
+      margin-right: auto;
+      width: 80%
+    }
+    &__grid {
+      width: 50%;
+    }
+  }
+}
+
 .slider {
   color: #7568ff !important;
   &__container {

@@ -3,13 +3,13 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import dark from '@amcharts/amcharts4/themes/dark';
 import animated from '@amcharts/amcharts4/themes/animated';
-import randomDataGenerator from './components/randomDataGenerator';
-import CustomCard from './components/CustomCard';
-import * as utils from './components/utils';
+import randomDataGenerator from '../components/randomDataGenerator';
+import CustomCard from '../components/CustomCard';
+import * as utils from '../components/utils';
 import {BarChart} from '@material-ui/icons';
 import {Grid, Paper, Typography} from '@material-ui/core';
 
-export default class SpikeTrain extends React.Component {
+export default class Chapter1 extends React.Component {
   constructor() {
     super();
     this.chart = null;
@@ -93,7 +93,7 @@ export default class SpikeTrain extends React.Component {
         <Grid item xs={12}>
           <Paper className={'stats__text'}>
             <Typography variant={'h4'} align={'center'} gutterBottom={true}>
-              Spike Trains <br /> &nbsp;
+              Chapter 1 <br /> &nbsp;
             </Typography>
             <Typography align={'center'} gutterBottom={true}>
               This section is still under development.
@@ -101,7 +101,7 @@ export default class SpikeTrain extends React.Component {
           </Paper>
         </Grid>
         <Grid item xs={12}>
-          <CustomCard title={'Spike Train'} avatar={<BarChart />}>
+          <CustomCard title={'Theoretical Neuroscience'} avatar={<BarChart />}>
             <div className="stats__chart" ref={'chart'} />
           </CustomCard>
         </Grid>
