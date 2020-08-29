@@ -208,7 +208,7 @@ class NormalChart extends React.Component {
       this.props.toggleUpdateData('normal');
     }
     return (
-      <CustomCard title={'Normal Probability Distribution Histograms'} avatar={<BarChart />}>
+      <CustomCard title={'Normal Probability Distribution Histograms'} avatar={<BarChart />} expanded={true}>
         <div className={'stats__chart'} ref={'normal_chart'} />
       </CustomCard>
     );
