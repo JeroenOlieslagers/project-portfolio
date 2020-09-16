@@ -11,6 +11,11 @@ import Highlight from 'react-highlight.js';
 import fano from '../images/fano.svg';
 import cv from '../images/cv.svg';
 import spike_train_bw from '../images/spike_train_bw.svg';
+import spike_train_refr from '../images/spike_train_refr.svg';
+import isi_refr from '../images/isi_refr.svg';
+import cv_refr from '../images/cv_refr.svg';
+import isis_refr from '../images/isis_refr.svg';
+import fano_window_refr from '../images/fano_window_refr.svg';
 
 export default class Chapter1 extends React.Component {
   constructor() {
@@ -168,19 +173,23 @@ export default class Chapter1 extends React.Component {
                     <BlockMath>{'C_V=\\frac{\\sigma_{\\tau}}{\\langle\\tau\\rangle}'}</BlockMath>
                     where
                     <BlockMath>
-                      {'\\langle\\tau\\rangle = \\int^{\\infty}_0 \\tau \\text{p}_{\\tau}[\\tau] \\text{d}\\tau = \\frac{1}{\\text{r}} \n' +
-                      '\\sigma_{\\tau}^2 = \\int^{\\infty}_0\\tau^2\\text{p}_{\\tau}[\\tau] \\text{d}\\tau - \\langle\\tau\\rangle^2 = \\frac{1}{\\text{r}^2}'}
+                      {'\\begin{aligned}\n' +
+                      '\\langle\\tau\\rangle &= \\int^{\\infty}_0 \\tau \\text{p}_{\\tau}[\\tau] \\text{d}\\tau = \\frac{1}{\\text{r}}\\\\\n' +
+                      '\\sigma_{\\tau}^2 &= \\int^{\\infty}_0\\tau^2\\text{p}_{\\tau}[\\tau] \\text{d}\\tau - \\langle\\tau\\rangle^2 = \\frac{1}{\\text{r}^2}\n' +
+                      '\\end{aligned}'}
                     </BlockMath>
-                    using the fact that ISI (represented by <InlineMath>{'\\tau'}</InlineMath>) are distributed according to an exponential distribution (explanation for this in extension).
+                    using the fact that ISI (represented by <InlineMath>{'\\tau'}</InlineMath>) are distributed according to an exponential distribution (explanation for this in extensions section).
                     <br/><br/>
                     The Fano factor is defined as:
                     <BlockMath>{'F = \\frac{\\sigma_n^2}{\\langle n\\rangle}'}</BlockMath>
                     where
                     <BlockMath>
-                      {'\\langle n\\rangle = \\sum^{\\infty}_{n=0} n\\text{P}_{N}[n] = \\text{r}T \n' +
-                      '\\sigma_n^2 = \\Big(\\sum^{\\infty}_{n=0}n^2\\text{P}_{N}[n]\\Big) - \\langle n\\rangle^2 = \\text{r}T'}
+                      {'\\begin{aligned}\n' +
+                      '\\langle n\\rangle &= \\sum^{\\infty}_{n=0} n\\text{P}_{N}[n] = \\text{r}T\\\\\n' +
+                      '\\sigma_n^2 &= \\Big(\\sum^{\\infty}_{n=0}n^2\\text{P}_{N}[n]\\Big) - \\langle n\\rangle^2 = \\text{r}T\n' +
+                      '\\end{aligned}'}
                     </BlockMath>
-                    using the fact that spike times (represented by <InlineMath>{'n'}</InlineMath>) are distributed according to a Poisson distribution (explanation for this in extension).
+                    using the fact that spike times (represented by <InlineMath>{'n'}</InlineMath>) are distributed according to a Poisson distribution (explanation for this in extensions section).
                     <br/><br/>
                     The theoretical values of both of these metrics are 1 for a homogeneous Poisson process independent of <InlineMath>{'T'}</InlineMath>.
                     <br/>
@@ -336,6 +345,172 @@ export default class Chapter1 extends React.Component {
                     </Grid>
                     <Grid key={1} item className={'neur__questions__gridL'}>
                       <CardMedia image={cv} className={'neur__questions__image'}/>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </CustomCard>
+            <CustomCard title={'Question 2'} avatar={<Subject />} expanded={false}>
+              <Grid container spacing={3} justify='center'>
+                <Grid key={0} item className={'neur__questions__gridL'}>
+                  <Typography>
+                    <i>Add a refractory period to the Poisson spike generator by allowing
+                      the firing rate to depend on time. Initially, set the firing rate to a
+                      constant value, <InlineMath>{'\\text{r}(t) = \\text{r}_0'}</InlineMath>. After every spike, set
+                      &nbsp;<InlineMath>{'\\text{r}(t)'}</InlineMath> to 0, and then allow it to recover exponentially back
+                      to <InlineMath>{'\\text{r}_0'}</InlineMath> with a time constant
+                      &nbsp;<InlineMath>{'\\tau_{\\text{ref}}'}</InlineMath> that controls the refractory recovery rate. In
+                      other words, have <InlineMath>{'\\text{r}(t)'}</InlineMath> obey the equation
+                      <BlockMath>
+                        {'\\tau_{\\text{ref}}\\frac{\\text{dr}}{\\text{d}t}=\\text{r}_0-\\text{r}'}
+                      </BlockMath>
+                      except immediately after a spike, when it is set to 0.</i><br /><br />
+                    Solving this ODE with an initial condition of zero at t=0, we get the following:
+                    <BlockMath>{'\\text{r}(t) = \\text{r}_0(1-e^{-\\frac{t}{\\tau_{\\text{ref}}}})'}</BlockMath>
+                    The way we will implement this is through rejection sampling. We will first take a spike train formed by the homogeneous
+                    Poisson process and then for each spike, reject it if
+                    &nbsp;<InlineMath>{'\\frac{\\text{r}(t_i)}{\\text{r}_0} < x_{\\text{rand}}'}</InlineMath> where
+                    &nbsp;<InlineMath>{'x_{\\text{rand}}'}</InlineMath> is a random uniform variable as before and <InlineMath>{'t_i'}</InlineMath> are the spike times.
+                  </Typography>
+                  <CustomCard title={'Code'} avatar={<Code />} expanded={false}>
+                    <Highlight language={'python'}>
+                      {'def refractory_period(t, r0, tau):\n' +
+                      '    """\n' +
+                      '    Function that returns the exponential decay model for the refractory period with an initial condition of 0 at t=0\n' +
+                      '    """\n' +
+                      '    return r0 * (1 - np.exp(-t / tau))\n' +
+                      '\n' +
+                      '\n' +
+                      'def refractory_homogeneous_poisson(r0, T, tau, n=1):\n' +
+                      '    """\n' +
+                      '    Generates a homogeneous Poisson spike train with a refractory period (time constant tau), rate r (Hz) and duration T (s) using rejection sampling\n' +
+                      '    :param r: rate\n' +
+                      '    :param T: duration\n' +
+                      '    :param tau: time constant for exponential decay model of refractory period\n' +
+                      '    :param n: set number of trials. 1 will return a numpy array, anything larger will return a list of numpy arrays\n' +
+                      '    """\n' +
+                      '    if n != 1:          # Use recursion to sample multiple trials\n' +
+                      '        return [refractory_homogeneous_poisson(r0, T, tau, n=1) for i in range(n)]\n' +
+                      '    else:\n' +
+                      '        t = homogeneous_poisson(r0, T)\n' +
+                      '        retained_indices = [0]\n' +
+                      '        for i in range(t.shape[0]-1):                           # Loop over all spikes\n' +
+                      '            xrand = np.random.rand()                            \n' +
+                      '            rt = refractory_period(t[i+1] - t[retained_indices[-1]], r0, tau)\n' +
+                      '            if rt/r0 > xrand:                                   # Rejection sampling\n' +
+                      '                retained_indices.append(i+1)\n' +
+                      '        return t[retained_indices]\n' +
+                      '    """\n' +
+                      '    Below is a very fast, vectorised way of rejection sampling. However, it will not be used since it treats all spikes at once and so will\n' +
+                      '    delete too many spikes\n' +
+                      '    else:\n' +
+                      '        t = homogeneous_poisson(r0, T)\n' +
+                      '        isi = to_isi(t)[1:]                                     # Exclude first spike since it can never be in a refractory period\n' +
+                      '        rt = refractory_period(isi, r0, tau)                    # Get values for r(t) at each spike\n' +
+                      '        xrand = np.random.rand(rt.shape[0])                     # Random variables for rejection sampling\n' +
+                      '        retained_indices = np.where(rt/r0 > xrand)[0] + 1       # Rejection sampling (+1 to account for first spike)\n' +
+                      '        retained_indices = np.insert(retained_indices, 0, 0)    # Add back the first spike (index 0)\n' +
+                      '        retained_spikes = t[retained_indices]\n' +
+                      '        return retained_spikes\n' +
+                      '    """' +
+                      '\n' +
+                      '\n' +
+                      't = refractory_homogeneous_poisson(100, 10, 0.01, n=100)\n' +
+                      'plot_spikes(t, T=1)\n' +
+                      'plt.show()\n' +
+                      'plot_interval_hist(t)\n' +
+                      'plt.title(r\'Interspike interval histogram $\\displaystyle\\tau_{\\text{ref}} = 10ms$\')\n' +
+                      'plt.show()'}
+                    </Highlight>
+                  </CustomCard>
+                </Grid>
+                <Grid key={1} item className={'neur__questions__gridR'}>
+                  <Grid container spacing={0} justify='center'>
+                    <Grid key={0} item className={'neur__questions__gridL'}>
+                      <CardMedia image={spike_train_refr} className={'neur__questions__image'}/>
+                    </Grid>
+                    <Grid key={1} item className={'neur__questions__gridL'}>
+                      <CardMedia image={isi_refr} className={'neur__questions__image'}/>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <hr className={'neur__hr'}/>
+              <Grid container spacing={3} justify='center'>
+                <Grid key={0} item className={'neur__questions__gridL'}>
+                  <Typography>
+                    <i>Plot the coeffcient of variation as a function of <InlineMath>{'\\tau_{\\text{ref}}'}</InlineMath> over the range 1 ms
+                    &nbsp;<InlineMath>{'\\leq \\tau_{\\text{ref}} \\leq'}</InlineMath> 20 ms, and plot interspike interval histograms for a few different values of
+                    &nbsp;<InlineMath>{'\\tau_{\\text{ref}}'}</InlineMath> in this range.</i><br/><br/>
+                    The coefficient of variation decreases as the value of <InlineMath>{'\\tau_{\\text{ref}}'}</InlineMath> is increased. This makes sense because the larger
+                    the value of <InlineMath>{'\\tau_{\\text{ref}}'}</InlineMath>, the further our model is from an exponential distribution as seen by the deviation of the
+                    coefficient of variation.<br/>
+                    This is further confirmed by looking at the interspike interval histogram which shows us that the distribution is no longer
+                    just exponential: it now has the shape of a Poisson distribution but on closer inspection of the mean and variances, we see that
+                    the distribution is not exactly Poisson (mean and variance do not equal). <br/><br/>
+                    A description of modelling this distribution if found in the extensions section.
+                  </Typography>
+                  <CustomCard title={'Code'} avatar={<Code />} expanded={false}>
+                    <Highlight language={'python'}>
+                      {'taus = np.linspace(1, 20, 50) / 1000\n' +
+                      'Cv = [coefficient_variation(refractory_homogeneous_poisson(100, 10, i, 5)) for i in taus]\n' +
+                      'plt.scatter(taus, Cv)\n' +
+                      'plt.xlabel(r\'$\\displaystyle\\tau_{\\text{ref}} (ms)$\')\n' +
+                      'plt.ylabel(\'Coefficient of variation\')\n' +
+                      'plt.show()\n' +
+                      '\n' +
+                      't = refractory_homogeneous_poisson(100, 1000, 1e-3, 1)\n' +
+                      'plot_interval_hist(t, 0, True, 0.33, r\'$\\displaystyle\\tau_{\\text{ref}} = 1ms$\')\n' +
+                      '\n' +
+                      't = refractory_homogeneous_poisson(100, 1000, 1e-2, 1)\n' +
+                      'plot_interval_hist(t, 1, True, 0.33, r\'$\\displaystyle\\tau_{\\text{ref}} = 10ms$\')\n' +
+                      '\n' +
+                      '\n' +
+                      't = refractory_homogeneous_poisson(100, 1000, 1e-1, 1)\n' +
+                      'plot_interval_hist(t, 2, True, 0.33, r\'$\\displaystyle\\tau_{\\text{ref}} = 100ms$\')\n' +
+                      '\n' +
+                      'plt.legend()'}
+                    </Highlight>
+                  </CustomCard>
+                </Grid>
+                <Grid key={1} item className={'neur__questions__gridR'}>
+                  <Grid container spacing={0} justify='center'>
+                    <Grid key={0} item className={'neur__questions__gridL'}>
+                      <CardMedia image={cv_refr} className={'neur__questions__image'}/>
+                    </Grid>
+                    <Grid key={1} item className={'neur__questions__gridL'}>
+                      <CardMedia image={isis_refr} className={'neur__questions__image'}/>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <hr className={'neur__hr'}/>
+              <Grid container spacing={3} justify='center'>
+                <Grid key={0} item className={'neur__questions__gridL'}>
+                  <Typography>
+                    <i>Compute the Fano factor for spike counts obtained over counting intervals ranging from 1 to 100 ms for the
+                      case <InlineMath>{'\\tau_{\\text{ref}}'}</InlineMath> = 10 ms.</i><br/><br/>
+                    As compared to question 1, the Fano factor rapidly decays away from 1 as the window size increases which is not seen for the homogeneous
+                    Poisson spike generator. This is an expected result since larger windows capture the effect of the refractory period better, straying
+                    further from the homogeneous Poisson results where the Fano factor is 1.
+                  </Typography>
+                  <CustomCard title={'Code'} avatar={<Code />} expanded={false}>
+                    <Highlight language={'python'}>
+                      {'t = refractory_homogeneous_poisson(100, 50, 1e-2, 10)\n' +
+                      'windows = np.linspace(1, 100, 100) / 1000\n' +
+                      'F = [fano_factor(t, i, 50) for i in windows]\n' +
+                      'plt.scatter(1000*windows, F)\n' +
+                      'plt.xlabel(\'Window size (ms)\')\n' +
+                      'plt.ylabel(\'Fano factor\')\n' +
+                      'plt.title(\'Fano factor for different window sizes\')\n' +
+                      'plt.show()'}
+                    </Highlight>
+                  </CustomCard>
+                </Grid>
+                <Grid key={1} item className={'neur__questions__gridR'}>
+                  <Grid container spacing={0} justify='center'>
+                    <Grid key={0} item className={'neur__questions__gridL'}>
+                      <CardMedia image={fano_window_refr} className={'neur__questions__image'}/>
                     </Grid>
                   </Grid>
                 </Grid>

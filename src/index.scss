@@ -128,6 +128,9 @@ body {
     }
     &__image {
       padding-top: 50%;
+      &--square {
+        padding-top: 100%;
+      }
       margin-left: auto;
       margin-right: auto;
       width: 100%;
@@ -137,6 +140,7 @@ body {
     height:3px;
     border-width:0;
     background-color: #bebebe;
+    margin: 1rem;
   }
 }
 
