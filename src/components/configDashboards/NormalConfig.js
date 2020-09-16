@@ -14,7 +14,7 @@ class NormalConfig extends React.Component {
 
   render() {
     return (
-      <CustomCard title={'Graph Configuration'} avatar={<Tune />}>
+      <CustomCard title={'Graph Configuration'} avatar={<Tune />} expanded={true}>
         <Grid container>
           <Grid item xs={6}>
             <SliderInput

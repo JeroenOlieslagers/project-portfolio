@@ -4,7 +4,7 @@ import {ExpandMore} from '@material-ui/icons';
 import React from 'react';
 
 export default function CustomCard(props) {
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState(props.expanded);
 
   function handleExpandClick() {
     setExpanded(!expanded);

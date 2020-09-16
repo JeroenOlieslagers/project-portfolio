@@ -1,6 +1,6 @@
 {
-  "name": "data-visualisation",
-  "description": "An app that allows easy display of statistical data.",
+  "name": "project-portfolio",
+  "description": "A collection of my personal projects.",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,6 +13,7 @@
     "prettier": "^1.19.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-highlight.js": "^1.0.7",
     "react-katex": "^2.0.2",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
@@ -32,7 +33,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/JeroenOlieslagers/data-visualisation.git"
+    "url": "git+ssh://git@github.com/JeroenOlieslagers/project-portfolio.git"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -57,7 +58,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://jeroenolieslagers.github.io/data-visualisation",
+  "homepage": "https://jeroenolieslagers.github.io/project-portfolio",
   "devDependencies": {
     "gh-pages": "^2.2.0"
   }

@@ -56,8 +56,8 @@ export default class RayTracing extends React.Component {
     this.multiRayText = document.getElementById('multiRay');
     this.shootModeText = document.getElementById('shootMode');
 
-    this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString();
-    this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString();
+    this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString() + " (use arrow keys to change)";
+    this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString() + " (press 'a' to add object edges)";
     this.edgesText.innerHTML = "Number of edges: " + this.normals.length.toString();
     this.frameText.innerHTML = "Frame (F): " + (this.frame_on ? "On" : "Off");
     this.raysText.innerHTML = "Number of rays: " + this.numberOfRays.toString();
@@ -284,7 +284,7 @@ export default class RayTracing extends React.Component {
       let poly = this.drawPolygon(new Vector(event.x - rect.left, event.y - rect.top), this.polyRadius, this.polyN, this.polyAngle, true);
       this.objects.push(poly[0]);
       this.normals.push(...poly[1]);
-      this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString();
+      this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString() + " (press 'a' to add object edges)";
       this.edgesText.innerHTML = "Number of edges: " + this.normals.length.toString();
     }
     else {
@@ -305,17 +305,17 @@ export default class RayTracing extends React.Component {
   onScroll = (event) =>{
     if (this.polyDraw) {
       if (!(this.polyN === 3 && event.deltaY > 0)){
-        this.polyN -= event.deltaY / 200;
+        this.polyN -= event.deltaY / 100;
         this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
           "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
         this.draw();
       }
     }
     if (this.multiRayMode) {
       if (!(this.multiRayN === 1 && event.deltaY > 0)){
-        this.multiRayN -= event.deltaY / 200;
-        this.multiRayText.innerHTML = "Multi-ray mode (M): " + (this.multiRayMode ? "On (N:"+this.multiRayN.toString()+")" : "Off");
+        this.multiRayN -= event.deltaY / 100;
+        this.multiRayText.innerHTML = "Multi-ray mode (M): " + (this.multiRayMode ? "On (N:"+this.multiRayN.toString()+", scroll)" : "Off");
         this.draw();
       }
     }
@@ -344,9 +344,9 @@ export default class RayTracing extends React.Component {
             this.normals.push(this.calculateNormal(this.objects[this.objects.length - 1][0],
               this.objects[this.objects.length - 1][this.objects[this.objects.length - 1].length - 1]));
             this.edgesText.innerHTML = "Number of edges: " + this.normals.length.toString();
-            this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString();
+            this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString() + " (press 'a' to add object edges)";
           } else if (this.objects[this.objects.length - 1].length === 2) {
-            this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString();
+            this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString() + " (press 'a' to add object edges)";
           }
           else {
             this.objects.pop();
@@ -375,7 +375,7 @@ export default class RayTracing extends React.Component {
         this.polyAngle -= Math.PI / 16;
         this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
           "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
       }
       this.draw();
     }
@@ -384,11 +384,11 @@ export default class RayTracing extends React.Component {
         this.polyRadius += 10;
         this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
           "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
       }
       else {
         this.recursionDepth++;
-        this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString();
+        this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString() + " (use arrow keys to change)";
       }
       this.draw();
     }
@@ -397,7 +397,7 @@ export default class RayTracing extends React.Component {
         this.polyAngle += Math.PI / 16;
         this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
           "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
       }
       this.draw();
     }
@@ -407,13 +407,13 @@ export default class RayTracing extends React.Component {
           this.polyRadius -= 10;
           this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
             "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-            "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+            "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
         }
       }
       else {
         if (this.recursionDepth !== 1) {
           this.recursionDepth--;
-          this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString();
+          this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString() + " (use arrow keys to change)";
         }
       }
       this.draw();
@@ -425,20 +425,20 @@ export default class RayTracing extends React.Component {
         this.polyAngle = 0;
         this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
           "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+          "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
       }
       else {
         this.recursionDepth = 3;
-        this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString();
+        this.recursionDepthText.innerHTML = "Recursion depth: " + this.recursionDepth.toString() + " (use arrow keys to change)";
         this.multiRayN = 12;
-        this.multiRayText.innerHTML = "Multi-ray mode (M): " + (this.multiRayMode ? "On (N:"+this.multiRayN.toString()+")" : "Off");
+        this.multiRayText.innerHTML = "Multi-ray mode (M): " + (this.multiRayMode ? "On (N:"+this.multiRayN.toString()+", scroll)" : "Off");
       }
       this.draw();
     }
     if (event.keyCode === 67) {
       this.objects = [];
       this.normals = [];
-      this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString();
+      this.objectsText.innerHTML = "Number of objects: " + this.objects.length.toString() + " (press 'a' to add object edges)";
       this.edgesText.innerHTML = "Number of edges: " + this.normals.length.toString();
       this.draw();
     }
@@ -460,12 +460,12 @@ export default class RayTracing extends React.Component {
       this.polyDraw = !this.polyDraw;
       this.polyDrawText.innerHTML = "Polygon draw mode (P): " + (this.polyDraw ?
         "On (N="+this.polyN.toString()+", R="+this.polyRadius.toString()+", " +
-        "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°)"  : "Off");
+        "θ="+(this.round((this.polyAngle*(180/Math.PI)%360), 3)).toString()+"°, scroll/arrow keys)"  : "Off");
       this.draw();
     }
     if (event.keyCode === 77) {
       this.multiRayMode = !this.multiRayMode;
-      this.multiRayText.innerHTML = "Multi-ray mode (M): " + (this.multiRayMode ? "On (N:"+this.multiRayN.toString()+")" : "Off");
+      this.multiRayText.innerHTML = "Multi-ray mode (M): " + (this.multiRayMode ? "On (N:"+this.multiRayN.toString()+", scroll)" : "Off");
       this.draw();
     }
     if (event.keyCode === 81) {

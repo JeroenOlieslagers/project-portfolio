@@ -191,7 +191,7 @@ class PoissonChart extends React.Component {
       this.props.toggleUpdateData('poisson');
     }
     return (
-      <CustomCard title={'Poisson Probability Distribution Histograms'} avatar={<BarChart />}>
+      <CustomCard title={'Poisson Probability Distribution Histograms'} avatar={<BarChart />} expanded={true}>
         <div className={'stats__chart'} ref={'poisson_chart'} />
       </CustomCard>
     );
